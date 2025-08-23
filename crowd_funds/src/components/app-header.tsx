@@ -19,7 +19,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
   return (
     <header className="relative w-[80%] mx-auto top-[20px] rounded-[20px] z-50 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-400">
       <div className="mx-auto flex justify-between items-center">
-        <div className="flex items-baseline gap-4">
+        <div className="flex gap-[40px] items-baseline gap-4">
           <Link className="text-xl font-extrabold hover:text-neutral-500 dark:hover:text-white" href="/">
             <span>CrowdFunds</span>
           </Link>
@@ -28,7 +28,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
               {links.map(({ label, path }) => (
                 <li key={path}>
                   <Link
-                    className={`hover:text-neutral-500 dark:hover:text-white ${isActive(path) ? 'text-neutral-500 dark:text-white' : ''}`}
+                    className={`hover:text-neutral-500 font-semibold  dark:hover:text-white ${isActive(path) ? 'text-neutral-500 dark:text-white' : ''}`}
                     href={path}
                   >
                     {label}
