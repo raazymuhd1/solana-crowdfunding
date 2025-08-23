@@ -1,18 +1,47 @@
 import React from 'react'
 
-const Inputs = () => {
+interface IInput {
+    text: string;
+    containerStyles?: string;
+    inputStyles?: string;
+    inputPlaceholder: string;
+    labelId: string;
+}
+
+export const InputComp = ({ text, containerStyles, inputStyles, inputPlaceholder, labelId }: IInput) => {
+
+    return (
+        <aside className={`${containerStyles} flex flex-col gap-[2px]`}>
+            <label 
+                htmlFor={labelId} 
+                className='font-medium '> 
+                {text} 
+            </label>
+            <input 
+                id={labelId} 
+                type="text" 
+                placeholder={inputPlaceholder} 
+                className={`${inputStyles} w-full p-[10px] rounded-[10px] border-[1px]`} 
+            />
+       </aside>
+    )
+}
+
+// className = 'w-full p-[10px] rounded-[10px] border-[1px] '
+
+export const Inputs = () => {
   return (
     <div className='flex w-full items-center gap-[15px]'>
-        <aside className='flex w-[50%] flex-col gap-[2px]'>
-            <label htmlFor="title" className='font-medium '>Title:</label>
-            <input id="title" type="text" placeholder='enter campaign title' className='w-full p-[10px] rounded-[10px] border-[1px] ' />
-        </aside>
-          <aside className='flex w-[50%] flex-col gap-[2px]'>
-            <label htmlFor="desc" className='font-medium '>Description:</label>
-            <input id="desc" type="text" placeholder='enter campaign title' className='w-full p-[10px] rounded-[10px] border-[1px] ' />
-        </aside>
+          <InputComp
+            inputPlaceholder='enter campaign title' 
+            text='Title:'
+            containerStyles='w-[50%]'
+          />
+          <InputComp
+            inputPlaceholder='enter campaign description'
+            text='Description:'
+            containerStyles='w-[50%]'
+          />
     </div>
   )
 }
-
-export default Inputs

@@ -1,5 +1,5 @@
 import React from 'react'
-import Inputs from './inputs'
+import { InputComp, Inputs } from './inputs'
 
 const CreateCampaign = () => {
   return (
@@ -10,7 +10,13 @@ const CreateCampaign = () => {
         </div>
 
         <Inputs />
-        
+
+        {/* campaign authority */}
+          <InputComp
+            inputPlaceholder='enter campaign autority pubkey' 
+            text='Campaign Authority:' 
+            containerStyles='w-full' 
+          />
     </div>
   )
 }
