@@ -33,11 +33,13 @@ export const Inputs = () => {
   return (
     <div className='flex w-full items-center gap-[15px]'>
           <InputComp
+            labelId="title"
             inputPlaceholder='enter campaign title' 
             text='Title:'
             containerStyles='w-[50%]'
           />
           <InputComp
+            labelId="desc"
             inputPlaceholder='enter campaign description'
             text='Description:'
             containerStyles='w-[50%]'
