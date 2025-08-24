@@ -14,12 +14,15 @@ const CreateCampaign = () => {
                     {/* inputs */}  
                     <Inputs />
                     {/* campaign authority */}
-                    <InputComp
-                        labelId="authority"
-                        inputPlaceholder='enter campaign autority pubkey' 
-                        text='Campaign Authority:' 
-                        containerStyles='w-full' 
-                    />
+                    <div className="w-full flex flex-col gap-[5px]">
+                      <label htmlFor="desc"> Description: </label>
+                      <textarea rows={10} 
+                        className='w-full p-[10px] border-[1px] rounded-[10px]' 
+                        id="desc" 
+                        placeholder="enter your campaign description" 
+                        />
+                    </div>
+                        
               </div>
 
           {/* a campaign banner & submit btn */}

@@ -39,9 +39,9 @@ export const Inputs = () => {
             containerStyles='w-[50%]'
           />
           <InputComp
-            labelId="desc"
+            labelId="authority"
             inputPlaceholder='enter campaign description'
-            text='Description:'
+            text='Campaign Authority:'
             containerStyles='w-[50%]'
           />
     </div>
