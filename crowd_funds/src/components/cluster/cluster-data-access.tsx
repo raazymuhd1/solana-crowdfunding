@@ -1,12 +1,13 @@
 'use client'
-
-import { clusterApiUrl, Connection, Keypair } from '@solana/web3.js'
+import { AccountInfo, clusterApiUrl, Connection, Keypair } from '@solana/web3.js'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { createContext, ReactNode, useContext } from 'react'
 import { AnchorProvider, Program } from '@coral-xyz/anchor'
 import { CROWDFUNDS_IDL } from '@/constants'
+import { PublicKey } from "@solana/web3.js"
+import type { CampaignLists } from "@/types"
 
 export interface SolanaCluster {
   name: string
@@ -65,7 +66,9 @@ export interface ClusterProviderContext {
   setCluster: (cluster: SolanaCluster) => void
 
   getExplorerUrl(path: string): string,
-  getProgram: () => Program
+  getProgram: () => Program,
+  getAccounts: () => CampaignLists[],
+  setAccounts: (campaignPubkey: PublicKey, vaultPda: PublicKey) => void;
 }
 
 const Context = createContext<ClusterProviderContext>({} as ClusterProviderContext)
@@ -100,6 +103,17 @@ export function ClusterProvider({ children }: { children: ReactNode }) {
       const provider = new AnchorProvider(connection, wallet as any, { commitment: "confirmed" })   
       const crowdfunds = new Program(CROWDFUNDS_IDL, provider)
       return crowdfunds;
+    },
+
+    getAccounts: (): CampaignLists[] => {
+      const accounts: CampaignLists[] = JSON.parse(localStorage.getItem("accounts") || "[]") ;
+        return accounts
+    },
+    setAccounts: (campaignPubkey: PublicKey, vaultPda: PublicKey) => {
+        const campaignLists: CampaignLists[] = [
+           { campaignPda: campaignPubkey, vaultPda }
+        ] 
+      localStorage.setItem("accounts", JSON.stringify(campaignLists))
     }
   }
   return <Context.Provider value={value}>{children}</Context.Provider>

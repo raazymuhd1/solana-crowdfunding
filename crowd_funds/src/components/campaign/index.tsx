@@ -14,7 +14,7 @@ import type { CampaignDetails } from "@/types"
 
 const CreateCampaign = () => {
   const wallet = useWallet()
-  const { getProgram } = useCluster()
+  const { getProgram, setAccounts } = useCluster()
   const [campaignDetails, setCampaignDetails] = useState<CampaignDetails>({
       title: "campaign title",
       description: "campaign description",
@@ -94,6 +94,7 @@ const CreateCampaign = () => {
           console.log(`vault pda ${vaultPda}`)
           console.log(`campaign pda ${campaignPda}`)
           
+          setAccounts(campaignPda, vaultPda)
           // resetting the whole states
           setCampaignDetails({
             title: "",

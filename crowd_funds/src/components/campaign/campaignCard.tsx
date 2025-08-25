@@ -1,12 +1,22 @@
 import Image, { StaticImageData } from "next/image"
+import { useCluster } from '../cluster/cluster-data-access'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { PublicKey } from '@solana/web3.js'
 
 interface ICampaignProps {
     title: string;
     desc: string;
     img: StaticImageData;
+    campaignPda?: PublicKey;
 }
 
 const CampaignCard = ({ title, desc, img }: ICampaignProps) => {
+     const wallet = useWallet()
+     const { getProgram } = useCluster()
+
+     const supportCampaign = () => {
+        
+     }
 
     return (
         <div className="min-w-[300px] min-h-[300px] rounded-[15px] border-[1px] flex flex-col gap-[10px] overflow-hidden">
