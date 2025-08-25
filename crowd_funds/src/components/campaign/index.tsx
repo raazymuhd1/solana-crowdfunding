@@ -14,29 +14,14 @@ import type { CampaignDetails } from "@/types"
 
 const CreateCampaign = () => {
   const wallet = useWallet()
-  const { getProgram, setAccounts } = useCluster()
+  const { getProgram, setCampaigns } = useCluster()
   const [campaignDetails, setCampaignDetails] = useState<CampaignDetails>({
       title: "campaign title",
       description: "campaign description",
       raiseTarget: 0
   })
 
-  // const generatePda = (seeds: BufferArr) => {
-  //   try {
-  //     if(seeds.length > 0) {
-  //         const [pda, vaultBump] = PublicKey.findProgramAddressSync(
-  //           seeds,
-  //           CROWDFUNDS_ID
-  //         )
-          
-  //         return pda;
-
-  //     }
-
-  //   } catch(error) {
-  //     console.log(`error generating pda ${error}`)
-  //   }
-  // }
+  console.log(`wallet addr ${wallet.publicKey}`)
 
   const createCampaign = async() => {
     const VAULT_SEED = "VAULT_SEED"
@@ -79,23 +64,30 @@ const CreateCampaign = () => {
 
 
       try {
-            const campaignTx = await getProgram().methods.initializeCampaign(
-              campaignDetails.title,
-              campaignDetails.description,
-              raiseTarget
-            ).accounts({
-              campaignAuthor: wallet.publicKey,
-              campaign: campaignPda,
-              vault: vaultPda,
-              systemProgram: SystemProgram.programId
-            }).rpc({commitment: "confirmed"})
+          //   const campaignTx = await getProgram().methods.initializeCampaign(
+          //     campaignDetails.title,
+          //     campaignDetails.description,
+          //     raiseTarget
+          //   ).accounts({
+          //     campaignAuthor: wallet.publicKey,
+          //     campaign: campaignPda,
+          //     vault: vaultPda,
+          //     systemProgram: SystemProgram.programId
+          //   }).rpc({commitment: "confirmed"})
     
-          console.log("new campaign tx", campaignTx)
-          console.log(`vault pda ${vaultPda}`)
-          console.log(`campaign pda ${campaignPda}`)
-          
-          setAccounts(campaignPda, vaultPda)
+          // console.log("new campaign tx", campaignTx)
+          // console.log(`vault pda ${vaultPda}`)
+          // console.log(`campaign pda ${campaignPda}`)
+          console.log("saving")
+
           // resetting the whole states
+          
+        setCampaigns({
+            campaignPda,
+            vaultPda,
+            campaignDetails,
+          })
+
           setCampaignDetails({
             title: "",
             description: "",

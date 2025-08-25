@@ -1,3 +1,4 @@
+"use client"
 import { useState } from 'react'
 import CampaignCard from './campaignCard'
 import { dummyCampaigns } from "@/constants"

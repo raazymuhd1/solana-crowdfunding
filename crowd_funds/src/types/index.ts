@@ -9,6 +9,7 @@ export type CampaignDetails = {
 export interface CampaignLists {
     campaignPda: PublicKey;
     vaultPda: PublicKey;
+    campaignDetails: CampaignDetails
 }
 
 export interface CampaignType {
@@ -18,3 +19,7 @@ export interface CampaignType {
     campaignAuthor: PublicKey 
 }
 
+
+// create a campaign 
+//      ->  save to localstorage 
+//              -> retrieve campaigns from localstorage on campaign list

@@ -11,7 +11,9 @@ export function AppProviders({ children }: Readonly<{ children: React.ReactNode 
     <ReactQueryProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <ClusterProvider>
-          <SolanaProvider>{children}</SolanaProvider>
+          <SolanaProvider>
+              {children}
+          </SolanaProvider>
         </ClusterProvider>
       </ThemeProvider>
     </ReactQueryProvider>

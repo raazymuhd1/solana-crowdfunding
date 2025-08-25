@@ -67,8 +67,8 @@ export interface ClusterProviderContext {
 
   getExplorerUrl(path: string): string,
   getProgram: () => Program,
-  getAccounts: () => CampaignLists[],
-  setAccounts: (campaignPubkey: PublicKey, vaultPda: PublicKey) => void;
+  getCampaigns: () => CampaignLists[],
+  setCampaigns: (campaign: CampaignLists) => void;
 }
 
 const Context = createContext<ClusterProviderContext>({} as ClusterProviderContext)
@@ -105,15 +105,19 @@ export function ClusterProvider({ children }: { children: ReactNode }) {
       return crowdfunds;
     },
 
-    getAccounts: (): CampaignLists[] => {
-      const accounts: CampaignLists[] = JSON.parse(localStorage.getItem("accounts") || "[]") ;
-        return accounts
+    getCampaigns: (): CampaignLists[] => {
+      const storedCampaigns = localStorage.getItem("accounts");
+      const campaignLists: CampaignLists[] = storedCampaigns ? JSON.parse(storedCampaigns) : []
+       return campaignLists
     },
-    setAccounts: (campaignPubkey: PublicKey, vaultPda: PublicKey) => {
-        const campaignLists: CampaignLists[] = [
-           { campaignPda: campaignPubkey, vaultPda }
-        ] 
-      localStorage.setItem("accounts", JSON.stringify(campaignLists))
+    setCampaigns: function(campaign: CampaignLists) {
+        const storedCampaigns = localStorage.getItem("accounts");
+        const campaignLists: CampaignLists[] = storedCampaigns ? JSON.parse(storedCampaigns) : []
+        
+        campaignLists.push(campaign)
+        console.log(`campaigns: ${campaignLists.length}`)
+
+        localStorage.setItem("accounts", JSON.stringify(campaignLists))      
     }
   }
   return <Context.Provider value={value}>{children}</Context.Provider>

@@ -3,6 +3,9 @@ import './globals.css'
 import { AppProviders } from '@/components/app-providers'
 import { AppLayout } from '@/components/app-layout'
 import React from 'react'
+import { ClusterProvider } from '@/components/cluster/cluster-data-access'
+import { SolanaProvider } from '@/components/solana/solana-provider'
+import { AppHeader } from '@/components/app-header'
 
 export const metadata: Metadata = {
   title: 'CrowdFunds',
@@ -11,16 +14,19 @@ export const metadata: Metadata = {
 
 const links: { label: string; path: string }[] = [
   { label: 'Create Campaign', path: '/campaign' },
+  { label: 'Withdrawal', path: '/withdrawal' },
 ]
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`antialiased`}>
+       <body className={`antialiased`}>
         <AppProviders>
-          <AppLayout links={links}>{children}</AppLayout>
+          <AppLayout links={links}>
+            {children}
+          </AppLayout>
         </AppProviders>
-      </body>
+        </body>
     </html>
   )
 }
