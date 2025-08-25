@@ -5,36 +5,51 @@ import { CROWDFUNDS_ID } from '@/constants'
 import { Inputs } from './inputs'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useCluster } from '../cluster/cluster-data-access'
-import { Keypair, PublicKey } from '@solana/web3.js'
+import { PublicKey, SystemProgram } from '@solana/web3.js'
 import type { CampaignDetails } from "@/types"
 
-type BufferArr = (Buffer<ArrayBufferLike> | Uint8Array<ArrayBufferLike>);
+// authority: 2pPxaQieCNunVMhzM5fQdFz67pstVNHccYmFSPaXWJaY
+// created vaultPda: 7xr9Fdfi7JXG93UXgGX3p3mSbLxfLbXfJPPJuzBqxFFS
+// campaign pda created: 5YA9wKoCvFWDrp2T3iYap1T8YyYoxAGNbJoBVcvdGbeX
 
 const CreateCampaign = () => {
   const wallet = useWallet()
   const { getProgram } = useCluster()
   const [campaignDetails, setCampaignDetails] = useState<CampaignDetails>({
-      title: "",
-      description: "",
+      title: "campaign title",
+      description: "campaign description",
       raiseTarget: 0
   })
 
-  const generatePda = useCallback((seeds: BufferArr) => {
-    const [pda, vaultBump] = PublicKey.findProgramAddressSync(
-      seeds,
-      CROWDFUNDS_ID
-    )
-    
-    return pda;
-  }, [])
+  // const generatePda = (seeds: BufferArr) => {
+  //   try {
+  //     if(seeds.length > 0) {
+  //         const [pda, vaultBump] = PublicKey.findProgramAddressSync(
+  //           seeds,
+  //           CROWDFUNDS_ID
+  //         )
+          
+  //         return pda;
+
+  //     }
+
+  //   } catch(error) {
+  //     console.log(`error generating pda ${error}`)
+  //   }
+  // }
 
   const createCampaign = async() => {
     const VAULT_SEED = "VAULT_SEED"
     const CAMPAIGN_SEED = "CAMPAIGN_SEED"
 
     const raiseTarget = new anchor.BN(campaignDetails.raiseTarget);
-    const CAMPAIGN_AUTHOR = wallet.publicKey ? wallet.publicKey?.toBuffer() : null
 
+    if(!wallet.publicKey) {
+        console.log("no wallet connected")
+        return;
+    }
+
+    const CAMPAIGN_AUTHOR = wallet.publicKey.toBuffer();
     // seeds for pdas
     const vaultSeeds = [
         anchor.utils.bytes.utf8.encode(VAULT_SEED),
@@ -44,29 +59,40 @@ const CreateCampaign = () => {
     const campaignSeeds = [
         anchor.utils.bytes.utf8.encode(CAMPAIGN_SEED),
         CAMPAIGN_AUTHOR,
-        Buffer.from(campaignDetails.title, "utf8")
+        Buffer.from(campaignDetails.title || "campaign title", "utf8")
     ]
 
-    //@ts-ignore
-    const vaultPda = generatePda(vaultSeeds);
-    //@ts-ignore
-    const campPda = generatePda(campaignSeeds);
+    // //@ts-ignore
+    // const vaultPda = generatePda(vaultSeeds);
+    // //@ts-ignore
+    // const campPda = generatePda(campaignSeeds);
+
+    const [vaultPda, vaultBump] = PublicKey.findProgramAddressSync(
+      vaultSeeds,
+      CROWDFUNDS_ID
+    )
+
+    const [campaignPda, campBump] = PublicKey.findProgramAddressSync(
+      campaignSeeds,
+      CROWDFUNDS_ID
+    )
 
 
       try {
-          const campaignTx = await getProgram().methods.initializeCampaign(
-            campaignDetails.title,
-            campaignDetails.description,
-            raiseTarget
-          ).accounts({
-            campaignAuthor: wallet.publicKey != null && wallet.publicKey,
-            campaign: campPda,
-            vault: vaultPda
-          }).rpc({commitment: "confirmed"})
+            const campaignTx = await getProgram().methods.initializeCampaign(
+              campaignDetails.title,
+              campaignDetails.description,
+              raiseTarget
+            ).accounts({
+              campaignAuthor: wallet.publicKey,
+              campaign: campaignPda,
+              vault: vaultPda,
+              systemProgram: SystemProgram.programId
+            }).rpc({commitment: "confirmed"})
     
           console.log("new campaign tx", campaignTx)
           console.log(`vault pda ${vaultPda}`)
-          console.log(`campaign pda ${campPda}`)
+          console.log(`campaign pda ${campaignPda}`)
           
           // resetting the whole states
           setCampaignDetails({

@@ -3,9 +3,13 @@ import { AppProviders } from '@/components/app-providers'
 
 const CampaignLayout = ({ children }: { children: React.ReactNode } ) => {
   return (
-      <AppProviders>
-          <main> { children } </main>
-      </AppProviders>
+     <html lang='en' >
+        <body>
+          <AppProviders>
+              {children}
+          </AppProviders>
+        </body>
+     </html>
   )
 }
 
