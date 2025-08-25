@@ -3,13 +3,9 @@ import { AppProviders } from '@/components/app-providers'
 
 const CampaignLayout = ({ children }: { children: React.ReactNode } ) => {
   return (
-    <html lang="en">
-          <body className="" suppressHydrationWarning>
-            <AppProviders>
-                <main> { children } </main>
-            </AppProviders>
-        </body>
-    </html>
+      <AppProviders>
+          <main> { children } </main>
+      </AppProviders>
   )
 }
 

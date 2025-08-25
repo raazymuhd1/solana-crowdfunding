@@ -6,13 +6,14 @@ import { Inputs } from './inputs'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useCluster } from '../cluster/cluster-data-access'
 import { Keypair, PublicKey } from '@solana/web3.js'
+import type { CampaignDetails } from "@/types"
 
 type BufferArr = (Buffer<ArrayBufferLike> | Uint8Array<ArrayBufferLike>);
 
 const CreateCampaign = () => {
   const wallet = useWallet()
   const { getProgram } = useCluster()
-  const [campaignDetails, setCampaignDetails] = useState({
+  const [campaignDetails, setCampaignDetails] = useState<CampaignDetails>({
       title: "",
       description: "",
       raiseTarget: 0
@@ -64,7 +65,15 @@ const CreateCampaign = () => {
           }).rpc({commitment: "confirmed"})
     
           console.log("new campaign tx", campaignTx)
-      
+          console.log(`vault pda ${vaultPda}`)
+          console.log(`campaign pda ${campPda}`)
+          
+          // resetting the whole states
+          setCampaignDetails({
+            title: "",
+            description: "",
+            raiseTarget: 0
+          })
       } catch (error) {
           console.log(error)
       }
@@ -72,7 +81,7 @@ const CreateCampaign = () => {
 
 
   return (
-    <div className='w-[50%] mt-[40px] mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
+    <div className='lg:w-[50%] w-[80%] mt-[40px] mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
         <div className='flex items-center flex-col gap-[10px]'>
             <h2 className='font-extrabold text-[clamp(1.5rem,1.3vw,2rem)]'> Create Campaign </h2>
             <p className='font-normal text-[clamp(12px,1vw,16px)]'> fill up all the necessary details for your campaign </p>
@@ -81,7 +90,27 @@ const CreateCampaign = () => {
         <article className='p-[15px] flex flex-col gap-[20px] w-full'>
               <div className='flex flex-col gap-[10px]'>
                     {/* inputs */}  
-                    <Inputs />
+                    <div className='flex w-full items-center gap-[15px]'>
+                      <Inputs
+                        labelId="title"
+                        inputPlaceholder='enter campaign title'
+                        text='Title:'
+                        containerStyles='w-[50%]'
+                        setCampaignDetails={setCampaignDetails}
+                        campaignDetails={campaignDetails}
+                        updateField=''
+                      />
+                      <Inputs
+                        labelId="authority"
+                        inputPlaceholder='enter campaign description'
+                        text='Campaign Authority:'
+                        containerStyles='w-[50%]'
+                        setCampaignDetails={setCampaignDetails}
+                        campaignDetails={campaignDetails}
+                        updateField=''
+                      />
+                    </div>
+
                      {/* description */}
                     <div className="w-full flex flex-col gap-[5px]">
                       <label className='font-semibold' htmlFor="desc"> Description: </label>
@@ -101,7 +130,7 @@ const CreateCampaign = () => {
                       <label className='font-semibold' htmlFor="fund"> Fund To Raise: </label>
                       <input
                         onChange={(e) => setCampaignDetails({
-                          ...campaignDetails, raiseTarget: e.target.value
+                          ...campaignDetails, raiseTarget: Number(e.target.value)
                         })}
                         className='w-full px-[10px] py-[10px] border-[1px] rounded-[10px]' type="number" id="fund" />
                     </div>
@@ -116,7 +145,7 @@ const CreateCampaign = () => {
             className="px-[10px] py-[5px] border-[1px] bg-[#fff] text-[#000] font-bold rounded-[10px] w-[30%]"
             onClick={() => createCampaign()}
             > 
-            Submit Campaign 
+            Create Campaign 
            </button>
         </article>
 
