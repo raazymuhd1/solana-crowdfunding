@@ -1,48 +1,61 @@
 "use client"
-import React from 'react'
+import { useMemo, useCallback, useState} from 'react'
 import * as anchor from "@coral-xyz/anchor"
 import { CROWDFUNDS_ID } from '@/constants'
-import { InputComp, Inputs } from './inputs'
+import { Inputs } from './inputs'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useCluster } from '../cluster/cluster-data-access'
 import { Keypair, PublicKey } from '@solana/web3.js'
 
+type BufferArr = (Buffer<ArrayBufferLike> | Uint8Array<ArrayBufferLike>);
+
 const CreateCampaign = () => {
   const wallet = useWallet()
   const { getProgram } = useCluster()
-  
+  const [campaignDetails, setCampaignDetails] = useState({
+      title: "",
+      description: "",
+      raiseTarget: 0
+  })
+
+  const generatePda = useCallback((seeds: BufferArr) => {
+    const [pda, vaultBump] = PublicKey.findProgramAddressSync(
+      seeds,
+      CROWDFUNDS_ID
+    )
+    
+    return pda;
+  }, [])
+
   const createCampaign = async() => {
-      const VAULT_SEED = "VAULT_SEED"
-      const CAMPAIGN_SEED = "CAMPAIGN_SEED"
+    const VAULT_SEED = "VAULT_SEED"
+    const CAMPAIGN_SEED = "CAMPAIGN_SEED"
 
-      const CAMPAIGN_TITLE = "SAVE THE KIDS"
-      const CAMPAIGN_DESC = "Let's save the kids now, stop the thing going on"
-      const raiseTarget = new anchor.BN(10_000_000_000);
-      const CAMPAIGN_AUTHOR = wallet.publicKey ? wallet.publicKey?.toBuffer() : null
+    const raiseTarget = new anchor.BN(campaignDetails.raiseTarget);
+    const CAMPAIGN_AUTHOR = wallet.publicKey ? wallet.publicKey?.toBuffer() : null
 
-      const vaultSeeds = [
+    // seeds for pdas
+    const vaultSeeds = [
         anchor.utils.bytes.utf8.encode(VAULT_SEED),
         CAMPAIGN_AUTHOR
-      ]
-      const campaignSeeds = [
+    ]
+
+    const campaignSeeds = [
         anchor.utils.bytes.utf8.encode(CAMPAIGN_SEED),
         CAMPAIGN_AUTHOR,
-        Buffer.from(CAMPAIGN_TITLE, "utf8")
-      ]
+        Buffer.from(campaignDetails.title, "utf8")
+    ]
 
-      const [vaultPda, vaultBump] = PublicKey.findProgramAddressSync(
-        vaultSeeds,
-        CROWDFUNDS_ID
-      )
-      const [campPda, campBump] = PublicKey.findProgramAddressSync(
-        campaignSeeds,
-        CROWDFUNDS_ID
-      )
+    //@ts-ignore
+    const vaultPda = generatePda(vaultSeeds);
+    //@ts-ignore
+    const campPda = generatePda(campaignSeeds);
+
 
       try {
           const campaignTx = await getProgram().methods.initializeCampaign(
-            CAMPAIGN_TITLE,
-            CAMPAIGN_DESC,
+            campaignDetails.title,
+            campaignDetails.description,
             raiseTarget
           ).accounts({
             campaignAuthor: wallet.publicKey != null && wallet.publicKey,
@@ -57,6 +70,7 @@ const CreateCampaign = () => {
       }
   }
 
+
   return (
     <div className='w-[50%] mt-[40px] mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
         <div className='flex items-center flex-col gap-[10px]'>
@@ -68,16 +82,29 @@ const CreateCampaign = () => {
               <div className='flex flex-col gap-[10px]'>
                     {/* inputs */}  
                     <Inputs />
-                    {/* campaign authority */}
+                     {/* description */}
                     <div className="w-full flex flex-col gap-[5px]">
-                      <label htmlFor="desc"> Description: </label>
-                      <textarea rows={6} 
+                      <label className='font-semibold' htmlFor="desc"> Description: </label>
+                      <textarea 
+                        onChange={(e) => setCampaignDetails({
+                            ...campaignDetails, description: e.target.value 
+                        })}
+                        rows={6} 
                         className='w-full p-[10px] border-[1px] rounded-[10px]' 
                         id="desc" 
                         placeholder="enter your campaign description" 
                         />
                     </div>
                         
+                    {/* target funds */}
+                    <div className="w-full flex flex-col gap-[5px]">
+                      <label className='font-semibold' htmlFor="fund"> Fund To Raise: </label>
+                      <input
+                        onChange={(e) => setCampaignDetails({
+                          ...campaignDetails, raiseTarget: e.target.value
+                        })}
+                        className='w-full px-[10px] py-[10px] border-[1px] rounded-[10px]' type="number" id="fund" />
+                    </div>
               </div>
 
           {/* a campaign banner & submit btn */}
