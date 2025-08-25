@@ -4,7 +4,8 @@ import { dummyCampaigns } from "@/constants"
 
 const CampaignLists = () => {
   return (
-      <div className='w-full p-[20px] mt-[20px] grid gap-[20px] grid-cols-[repeat(auto-fit,minmax(0,1fr))]'>
+      <div 
+          className='w-full p-[20px] mt-[20px] grid gap-[20px] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]'>
           {dummyCampaigns.map(camp => (
              <CampaignCard
                 key={camp.id} 

@@ -1,0 +1,374 @@
+{
+    "address": "HA1we1h6ChwUBu3R2iFsMrZcn8zY3roUmPFQ5aqmi4xS",
+    "metadata": {
+        "name": "crowdfunds",
+        "version": "0.1.0",
+        "spec": "0.1.0",
+        "description": "Created with Anchor"
+    },
+    "instructions": [
+        {
+            "name": "donate_to_campaign",
+            "discriminator": [
+                11,
+                213,
+                34,
+                2,
+                196,
+                121,
+                15,
+                216
+            ],
+            "accounts": [
+                {
+                    "name": "donator",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "vault",
+                    "writable": true
+                },
+                {
+                    "name": "campaign",
+                    "writable": true
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "campaign_pda",
+                    "type": "pubkey"
+                },
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "initialize_campaign",
+            "discriminator": [
+                169,
+                88,
+                7,
+                6,
+                9,
+                165,
+                65,
+                132
+            ],
+            "accounts": [
+                {
+                    "name": "campaign_author",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "campaign",
+                    "writable": true
+                },
+                {
+                    "name": "vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    86,
+                                    65,
+                                    85,
+                                    76,
+                                    84,
+                                    95,
+                                    83,
+                                    69,
+                                    69,
+                                    68
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "campaign_author"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "campaign_title",
+                    "type": "string"
+                },
+                {
+                    "name": "campaign_description",
+                    "type": "string"
+                },
+                {
+                    "name": "raise_target",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "withdraw_from_campaign",
+            "discriminator": [
+                51,
+                1,
+                151,
+                234,
+                128,
+                166,
+                167,
+                192
+            ],
+            "accounts": [
+                {
+                    "name": "authority",
+                    "writable": true,
+                    "signer": true,
+                    "relations": [
+                        "vault"
+                    ]
+                },
+                {
+                    "name": "vault",
+                    "writable": true
+                },
+                {
+                    "name": "campaign",
+                    "writable": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "campaign_key",
+                    "type": "pubkey"
+                }
+            ]
+        }
+    ],
+    "accounts": [
+        {
+            "name": "Campaign",
+            "discriminator": [
+                50,
+                40,
+                49,
+                11,
+                157,
+                220,
+                229,
+                192
+            ]
+        },
+        {
+            "name": "Vault",
+            "discriminator": [
+                211,
+                8,
+                232,
+                43,
+                2,
+                152,
+                117,
+                119
+            ]
+        }
+    ],
+    "events": [
+        {
+            "name": "FundsDonated",
+            "discriminator": [
+                216,
+                255,
+                55,
+                169,
+                195,
+                85,
+                101,
+                23
+            ]
+        },
+        {
+            "name": "FundsWithdrew",
+            "discriminator": [
+                248,
+                133,
+                77,
+                241,
+                132,
+                203,
+                223,
+                180
+            ]
+        },
+        {
+            "name": "ProposalCreated",
+            "discriminator": [
+                186,
+                8,
+                160,
+                108,
+                81,
+                13,
+                51,
+                206
+            ]
+        }
+    ],
+    "errors": [
+        {
+            "code": 6000,
+            "name": "InvalidProposalId",
+            "msg": "No proposal with that ID"
+        },
+        {
+            "code": 6001,
+            "name": "IdMismatch",
+            "msg": "Proposal ID Mismatch"
+        },
+        {
+            "code": 6002,
+            "name": "TitleTooLong",
+            "msg": "Title Too Long"
+        },
+        {
+            "code": 6003,
+            "name": "DescTooLong",
+            "msg": "Description too long"
+        },
+        {
+            "code": 6004,
+            "name": "InsufficientBalance",
+            "msg": "Insufficient Balance"
+        },
+        {
+            "code": 6005,
+            "name": "TransferFailed",
+            "msg": "Transfer Failed"
+        }
+    ],
+    "types": [
+        {
+            "name": "Campaign",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "title",
+                        "type": "string"
+                    },
+                    {
+                        "name": "description",
+                        "type": "string"
+                    },
+                    {
+                        "name": "raise_target",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "campaign_author",
+                        "type": "pubkey"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FundsDonated",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "campaign_pda",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "donator",
+                        "type": "pubkey"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FundsWithdrew",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "total_wd",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "authority",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "campaign_key",
+                        "type": "pubkey"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ProposalCreated",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "title",
+                        "type": "string"
+                    },
+                    {
+                        "name": "campaign_author",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "campaign_desc",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Vault",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "total_funds_raised",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "campaign",
+                        "type": {
+                            "defined": {
+                                "name": "Campaign"
+                            }
+                        }
+                    },
+                    {
+                        "name": "authority",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "campaign_pda",
+                        "type": "pubkey"
+                    }
+                ]
+            }
+        }
+    ]
+}

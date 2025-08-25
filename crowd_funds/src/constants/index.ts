@@ -1,4 +1,9 @@
 import { bg1, bg2, bg3, bg4 } from "@/assets";
+import programIdl from "@/idl/crowdfunds.json"
+import { PublicKey } from "@solana/web3.js";
+
+const CROWDFUNDS_ID = new PublicKey('HA1we1h6ChwUBu3R2iFsMrZcn8zY3roUmPFQ5aqmi4xS')
+const CROWDFUNDS_IDL = programIdl;
 
 const dummyCampaigns = [
     { id: 0, title: "Clean Water", desc: "providing free clean water to the kids", img: bg1 },
@@ -7,4 +12,4 @@ const dummyCampaigns = [
     { id: 3, title: "Help cancer", desc: "Helping a cancer survivor", img: bg4 },
 ]
 
-export { dummyCampaigns }
+export { dummyCampaigns, CROWDFUNDS_ID, CROWDFUNDS_IDL }

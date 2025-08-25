@@ -1,9 +1,12 @@
 'use client'
 
-import { clusterApiUrl, Connection } from '@solana/web3.js'
+import { clusterApiUrl, Connection, Keypair } from '@solana/web3.js'
+import { useWallet } from '@solana/wallet-adapter-react'
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { createContext, ReactNode, useContext } from 'react'
+import { AnchorProvider, Program } from '@coral-xyz/anchor'
+import { CROWDFUNDS_IDL } from '@/constants'
 
 export interface SolanaCluster {
   name: string
@@ -61,7 +64,8 @@ export interface ClusterProviderContext {
   deleteCluster: (cluster: SolanaCluster) => void
   setCluster: (cluster: SolanaCluster) => void
 
-  getExplorerUrl(path: string): string
+  getExplorerUrl(path: string): string,
+  getProgram: () => Program
 }
 
 const Context = createContext<ClusterProviderContext>({} as ClusterProviderContext)
@@ -71,13 +75,16 @@ export function ClusterProvider({ children }: { children: ReactNode }) {
   const clusters = useAtomValue(activeClustersAtom)
   const setCluster = useSetAtom(clusterAtom)
   const setClusters = useSetAtom(clustersAtom)
+  
+  const wallet = useWallet()
+  const connection = new Connection(cluster.endpoint)
 
   const value: ClusterProviderContext = {
     cluster,
     clusters: clusters.sort((a, b) => (a.name > b.name ? 1 : -1)),
     addCluster: (cluster: SolanaCluster) => {
       try {
-        new Connection(cluster.endpoint)
+        // new Connection(cluster.endpoint)
         setClusters([...clusters, cluster])
       } catch (err) {
         console.error(`${err}`)
@@ -88,6 +95,12 @@ export function ClusterProvider({ children }: { children: ReactNode }) {
     },
     setCluster: (cluster: SolanaCluster) => setCluster(cluster),
     getExplorerUrl: (path: string) => `https://explorer.solana.com/${path}${getClusterUrlParam(cluster)}`,
+    // getting program
+    getProgram: () => {
+      const provider = new AnchorProvider(connection, wallet as any, { commitment: "confirmed" })   
+      const crowdfunds = new Program(CROWDFUNDS_IDL, provider)
+      return crowdfunds;
+    }
   }
   return <Context.Provider value={value}>{children}</Context.Provider>
 }
