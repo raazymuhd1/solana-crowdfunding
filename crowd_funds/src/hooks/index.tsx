@@ -9,6 +9,7 @@ const useProgram = () => {
     const getProgram = (wallet: WalletContextState, programIdl: Idl): Program<Idl> => {
         const provider = new AnchorProvider(connection, wallet as any, { commitment: "confirmed" })
         const crowdfunds = new Program(programIdl, provider)
+        console.log(`programId: ${crowdfunds.programId}`)
         return crowdfunds;
     }
 

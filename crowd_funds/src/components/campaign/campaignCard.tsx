@@ -22,8 +22,12 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
     const [donateAmount, setDonateAmount] = useState(0)
      const [getProgram] = useProgram()
 
-     console.log(vaultPda)
+    console.log(`vault key : ${vaultPda}`)
 
+
+     /**
+      * @dev donating to a campaign
+      */
      const supportCampaign = async() => {
 
         if(!wallet.publicKey) {
@@ -59,7 +63,7 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
      }
 
     return (
-        <div className="min-w-[300px] min-h-[300px] rounded-[15px] border-[1px] flex flex-col gap-[10px] overflow-hidden">
+        <div className="min-w-[300px] min-h-[300px] rounded-[15px] border-[2px] flex flex-col gap-[10px] overflow-hidden">
             {/* small banner */}
             <Image src={img} placeholder="blur" className="w-full h-[40%] object-cover cursor-pointer transition-[scale,500ms] hover:scale-[1.1]" alt="campaign-banner" />
 
@@ -72,11 +76,13 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
                         <p> {description} </p>
                     </div>
 
-                    <h4 className="w-[30%] text-[clamp(12px,1vw,14px)] justify-self-start "> Target: {target} <strong className="font-bold">Sol</strong> </h4>
+                    <h4 className="text-[clamp(12px,1vw,14px)]"> Target: {target} <strong className="font-bold">Sol</strong> </h4>
+
+                    <h4 className="text-[clamp(12px,1vw,14px)]"> Vault Key: {vaultPda.toString()} </h4>
 
                     <input 
                         onChange={(e) => setDonateAmount(Number(e.target.value))}
-                        type="number" placeholder="enter an amount to donate" className="w-full p-[10px] border-[1px] rounded-[10px]" />
+                        type="number" placeholder="enter an amount to donate" className="w-full p-[10px] border-[1px] text-[#fff]  placeholder-[#fff] rounded-[10px]" />
 
                     {/* donate button */}
                     <button 

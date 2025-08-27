@@ -10,22 +10,22 @@ import { PublicKey } from '@solana/web3.js'
 
 const CampaignLists = () => {
  const { getCampaigns } = useCluster()
-  const [getProgram]  = useProgram()
   const [campaignAccns, setCampaignAccns] = useState<CampaignType[]>([])
 
   console.log(getCampaigns())
 
   return (
       <div 
-          className='w-full p-[20px] mt-[20px] grid gap-[20px] lg:grid-cols-[repeat(4,minmax(0,1fr))] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]'>
+          className={`w-full p-[20px] mt-[20px] gap-[20px]
+            ${getCampaigns().length > 0 ? "grid lg:grid-cols-[repeat(4,minmax(0,1fr))] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]}" : "flex items-center lg:flex-nowrap flex-wrap"} `}>
 
-          {getCampaigns().length > 0 && getCampaigns().map(camp => (
+          {getCampaigns().length > 0 ? getCampaigns().map(camp => (
              <CampaignCard
                 key={camp?.campaignDetails.id} 
                 {
                     ...{ 
-                        campaignPda: camp.campaignPda,
-                        vaultPda: camp.vaultPda,
+                        campaignPda: new PublicKey(camp.campaignPda),
+                        vaultPda: new PublicKey(camp.vaultPda),
                         title: camp?.campaignDetails.title,
                         description: camp?.campaignDetails.description,
                         ["img"]: dummyImg,
@@ -35,7 +35,9 @@ const CampaignLists = () => {
                 }
              />
 
-          )) }
+          )) : 
+            <h3 className='text-center w-full mx-auto font-semibold'> No campaign availabe, try to create one on the /campaign page </h3>
+          }
     </div>
   )
 }
