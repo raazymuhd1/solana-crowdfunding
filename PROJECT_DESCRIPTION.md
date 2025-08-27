@@ -60,7 +60,6 @@ after the withdrawal, all related accounts (vault, campaign) will be deleted/rem
  
 
 ### PDA Usage
-[TODO: Explain how you implemented Program Derived Addresses (PDAs) in your project. What seeds do you use and why?]
 
 **PDAs Used:**
 - `campaign PDA`: 
@@ -78,8 +77,6 @@ after the withdrawal, all related accounts (vault, campaign) will be deleted/rem
     to linked the vault and the related campaign when initializing the campaign.
 
 ### Program Instructions
-[TODO: List and describe all the instructions in your Solana program]
-
 **Instructions Implemented:**
 - `initialize_campaign`: 
     simply just creates the two important accounts (`vault` & `campaign`).
@@ -93,7 +90,6 @@ after the withdrawal, all related accounts (vault, campaign) will be deleted/rem
    As the name suggest, letting the campaign authority to withdraw the funds from the `Vault` that linked to the campaign.
 
 ### Account Structure
-[TODO: Describe your main account structures and their purposes]
 
 **Vault Account**
     an account to hold the campaign funds, see the structure below:
@@ -130,7 +126,6 @@ pub struct Vault {
 ## Testing
 
 ### Test Coverage
-[TODO: Describe your testing approach and what scenarios you covered]
 
 **Happy Path Tests:**
 - `Successfull Campaign Initialization`: 
@@ -157,3 +152,10 @@ anchor test
  - please ensure that the `title` & `description` of the campaign didn't exceed the length limitations.
  - ensure that only donate to an existed campaign
  - only a campaign authority that can withdraw from the vault
+
+ **FRONTEND NOTE**
+  **Improvement** need some improvement
+   as of now, I just saved the new campaign to the `localstorage`, therefore i only read the campaigns that has been saved on the `localstorage` to display it on the `homepage`.
+   because of that, only the campaign creator that able to see the campaign lists on the `homepage`, since it's been saved to the `localstorage` on their browser. Hopefully there some understnding from the `Ackee's Team` :)
+
+   **Reason** due too time limitations, i dont have much time to implement the on-chain data reading on the `homepage`
