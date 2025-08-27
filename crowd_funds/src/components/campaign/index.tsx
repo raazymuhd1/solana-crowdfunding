@@ -8,6 +8,7 @@ import { useCluster } from '../cluster/cluster-data-access'
 import useProgram from '@/hooks'
 import { PublicKey, SystemProgram } from '@solana/web3.js'
 import type { CampaignDetails } from "@/types"
+import { toast } from 'sonner'
 
 // authority: 2pPxaQieCNunVMhzM5fQdFz67pstVNHccYmFSPaXWJaY
 // created vaultPda: 7xr9Fdfi7JXG93UXgGX3p3mSbLxfLbXfJPPJuzBqxFFS
@@ -90,15 +91,37 @@ const CreateCampaign = () => {
           // resetting the whole states
           
         setCampaigns({
-            campaignPda: new PublicKey('5YA9wKoCvFWDrp2T3iYap1T8YyYoxAGNbJoBVcvdGbeX'),
-            vaultPda: new PublicKey("7xr9Fdfi7JXG93UXgGX3p3mSbLxfLbXfJPPJuzBqxFFS"),
+            campaignPda: campaignPda,
+            vaultPda: vaultPda,
             campaignDetails: {
                 ...campaignDetails,
                 id: campaignDetails.id + 1,
-                authority: "2pPxaQieCNunVMhzM5fQdFz67pstVNHccYmFSPaXWJaY" 
+                authority: campaignDetails.authority
             }
           })
 
+        toast("Vault Address:", {
+            description: `${vaultPda.toString()}`,
+            action: {
+               label: "close",
+               onClick: () => console.log("closing")
+            }
+        })
+        toast("Vault Authority Address:", {
+            description: `${campaignDetails.authority.toString()}`,
+            action: {
+               label: "close",
+               onClick: () => console.log("closing")
+            }
+        })
+        toast("Campaign Address:", {
+            description: `${campaignPda.toString()}`,
+            action: {
+               label: "close",
+               onClick: () => console.log("closing")
+            }
+        })
+      
           setCampaignDetails({
             id: 0,
             title: "",
@@ -117,6 +140,7 @@ const CreateCampaign = () => {
         <div className='flex items-center flex-col gap-[10px]'>
             <h2 className='font-extrabold text-[clamp(1.5rem,1.3vw,2rem)]'> Create Campaign </h2>
             <p className='font-normal text-[clamp(12px,1vw,16px)]'> fill up all the necessary details for your campaign </p>
+            <p className='bg-[yellow] text-center font-semibold text-[#000] rounded-[4px] p-[2px]'> <strong> NOTE:  </strong>Please save all the addresses from the popup on the bottom right after created a new campaign </p>
         </div>
         
         <article className='p-[15px] flex flex-col gap-[20px] w-full'>

@@ -108,7 +108,7 @@ const WithdrawFunds = () => {
                 className='px-[10px] w-[30%] py-[5px] rounded-[10px] border-[1px]'> Withdraw 
               </button>
 
-              <strong className='text-[clamp(10px,1vw,12px)] text-[yellow]'> NOTE: after withdrawal, all related accounts will be closed </strong>
+              <strong className='text-[clamp(10px,1vw,12px)] text-[#000] p-[10px] rounded-[10px] bg-[yellow]'> NOTE: after withdrawal, all related accounts will be closed </strong>
           </div>
     </section>
   )
