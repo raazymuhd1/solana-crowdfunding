@@ -12,7 +12,7 @@ import { toast } from 'sonner'
 
 // authority: 2pPxaQieCNunVMhzM5fQdFz67pstVNHccYmFSPaXWJaY
 // created vaultPda: 7xr9Fdfi7JXG93UXgGX3p3mSbLxfLbXfJPPJuzBqxFFS
-// campaign pda created: 5YA9wKoCvFWDrp2T3iYap1T8YyYoxAGNbJoBVcvdGbeX
+// campaign pda created: EB7zktpQ2VD1UTcMackz8iu36E55QhQfJEJStLSPrAEH
 
 const CreateCampaign = () => {
   const wallet = useWallet()
