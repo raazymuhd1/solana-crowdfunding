@@ -1,9 +1,11 @@
 import { PublicKey } from "@solana/web3.js"
 
 export type CampaignDetails = {
+    id: number;
     title: string;
     description: string;
     raiseTarget: number;
+    authority: string;
 }
 
 export interface CampaignLists {

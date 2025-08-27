@@ -9,11 +9,12 @@ interface IInput {
     labelId: string;
     campaignDetails: CampaignDetails;
     setCampaignDetails: Dispatch<SetStateAction<CampaignDetails>>;
+    handleChange: () => void;
     updateField: string;
 
 }
 
-export const Inputs = ({ text, containerStyles, inputStyles, inputPlaceholder, labelId, campaignDetails, setCampaignDetails, updateField }: IInput) => {
+export const Inputs = ({ text, containerStyles, inputStyles, inputPlaceholder, labelId, campaignDetails, setCampaignDetails, updateField, handleChange }: IInput) => {
 
     return (
         <aside className={`${containerStyles} flex flex-col gap-[2px]`}>

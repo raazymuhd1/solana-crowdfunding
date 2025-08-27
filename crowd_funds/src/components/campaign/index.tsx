@@ -1,10 +1,11 @@
 "use client"
-import { useMemo, useCallback, useState} from 'react'
+import { useCallback, useState} from 'react'
 import * as anchor from "@coral-xyz/anchor"
-import { CROWDFUNDS_ID } from '@/constants'
+import { CROWDFUNDS_ID, CROWDFUNDS_IDL } from '@/constants'
 import { Inputs } from './inputs'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useCluster } from '../cluster/cluster-data-access'
+import useProgram from '@/hooks'
 import { PublicKey, SystemProgram } from '@solana/web3.js'
 import type { CampaignDetails } from "@/types"
 
@@ -14,11 +15,14 @@ import type { CampaignDetails } from "@/types"
 
 const CreateCampaign = () => {
   const wallet = useWallet()
-  const { getProgram, setCampaigns } = useCluster()
+  const { setCampaigns } = useCluster()
+  const [ getProgram ] = useProgram()
   const [campaignDetails, setCampaignDetails] = useState<CampaignDetails>({
-      title: "campaign title",
-      description: "campaign description",
-      raiseTarget: 0
+      id: 0,
+      title: "",
+      description: "",
+      raiseTarget: 0,
+      authority: ""
   })
 
   console.log(`wallet addr ${wallet.publicKey}`)
@@ -64,34 +68,43 @@ const CreateCampaign = () => {
 
 
       try {
-          //   const campaignTx = await getProgram().methods.initializeCampaign(
-          //     campaignDetails.title,
-          //     campaignDetails.description,
-          //     raiseTarget
-          //   ).accounts({
-          //     campaignAuthor: wallet.publicKey,
-          //     campaign: campaignPda,
-          //     vault: vaultPda,
-          //     systemProgram: SystemProgram.programId
-          //   }).rpc({commitment: "confirmed"})
+            const campaignTx = await getProgram(
+              wallet,
+              CROWDFUNDS_IDL as anchor.Idl
+            ).methods.initializeCampaign(
+              campaignDetails.title,
+              campaignDetails.description,
+              raiseTarget
+            ).accounts({
+              campaignAuthor: wallet.publicKey,
+              campaign: campaignPda,
+              vault: vaultPda,
+              systemProgram: SystemProgram.programId
+            }).rpc({commitment: "confirmed"})
     
-          // console.log("new campaign tx", campaignTx)
-          // console.log(`vault pda ${vaultPda}`)
-          // console.log(`campaign pda ${campaignPda}`)
+          console.log("new campaign tx", campaignTx)
+          console.log(`vault pda ${vaultPda}`)
+          console.log(`campaign pda ${campaignPda}`)
           console.log("saving")
 
           // resetting the whole states
           
         setCampaigns({
-            campaignPda,
-            vaultPda,
-            campaignDetails,
+            campaignPda: new PublicKey('5YA9wKoCvFWDrp2T3iYap1T8YyYoxAGNbJoBVcvdGbeX'),
+            vaultPda: new PublicKey("7xr9Fdfi7JXG93UXgGX3p3mSbLxfLbXfJPPJuzBqxFFS"),
+            campaignDetails: {
+                ...campaignDetails,
+                id: campaignDetails.id + 1,
+                authority: "2pPxaQieCNunVMhzM5fQdFz67pstVNHccYmFSPaXWJaY" 
+            }
           })
 
           setCampaignDetails({
+            id: 0,
             title: "",
             description: "",
-            raiseTarget: 0
+            raiseTarget: 0,
+            authority: ""
           })
       } catch (error) {
           console.log(error)
@@ -117,7 +130,8 @@ const CreateCampaign = () => {
                         containerStyles='w-[50%]'
                         setCampaignDetails={setCampaignDetails}
                         campaignDetails={campaignDetails}
-                        updateField=''
+                        updateField='title'
+                        handleChange={() => {}}
                       />
                       <Inputs
                         labelId="authority"
@@ -126,7 +140,8 @@ const CreateCampaign = () => {
                         containerStyles='w-[50%]'
                         setCampaignDetails={setCampaignDetails}
                         campaignDetails={campaignDetails}
-                        updateField=''
+                        updateField='authority'
+                        handleChange={() => {}}
                       />
                     </div>
 

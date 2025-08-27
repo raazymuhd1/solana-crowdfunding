@@ -59,6 +59,7 @@ const activeClusterAtom = atom<SolanaCluster>((get) => {
 })
 
 export interface ClusterProviderContext {
+  connection: Connection,
   cluster: SolanaCluster
   clusters: SolanaCluster[]
   addCluster: (cluster: SolanaCluster) => void
@@ -66,7 +67,6 @@ export interface ClusterProviderContext {
   setCluster: (cluster: SolanaCluster) => void
 
   getExplorerUrl(path: string): string,
-  getProgram: () => Program,
   getCampaigns: () => CampaignLists[],
   setCampaigns: (campaign: CampaignLists) => void;
 }
@@ -83,6 +83,7 @@ export function ClusterProvider({ children }: { children: ReactNode }) {
   const connection = new Connection(cluster.endpoint)
 
   const value: ClusterProviderContext = {
+    connection,
     cluster,
     clusters: clusters.sort((a, b) => (a.name > b.name ? 1 : -1)),
     addCluster: (cluster: SolanaCluster) => {
@@ -99,25 +100,29 @@ export function ClusterProvider({ children }: { children: ReactNode }) {
     setCluster: (cluster: SolanaCluster) => setCluster(cluster),
     getExplorerUrl: (path: string) => `https://explorer.solana.com/${path}${getClusterUrlParam(cluster)}`,
     // getting program
-    getProgram: () => {
-      const provider = new AnchorProvider(connection, wallet as any, { commitment: "confirmed" })   
-      const crowdfunds = new Program(CROWDFUNDS_IDL, provider)
-      return crowdfunds;
-    },
+    // getProgram: () => {
+    //   const provider = new AnchorProvider(connection, wallet as any, { commitment: "confirmed" })   
+    //   const crowdfunds = new Program(CROWDFUNDS_IDL, provider)
+    //   return crowdfunds; 
+    // },
 
     getCampaigns: (): CampaignLists[] => {
-      const storedCampaigns = localStorage.getItem("accounts");
-      const campaignLists: CampaignLists[] = storedCampaigns ? JSON.parse(storedCampaigns) : []
-       return campaignLists
+        let campaigns: CampaignLists[] = [];
+        if(typeof window != "undefined") {
+          const storedCampaigns = window.localStorage.getItem("accounts");
+          campaigns = storedCampaigns ? JSON.parse(storedCampaigns) : []
+        }
+
+        return campaigns
     },
     setCampaigns: function(campaign: CampaignLists) {
-        const storedCampaigns = localStorage.getItem("accounts");
+        const storedCampaigns = window.localStorage.getItem("accounts");
         const campaignLists: CampaignLists[] = storedCampaigns ? JSON.parse(storedCampaigns) : []
         
         campaignLists.push(campaign)
         console.log(`campaigns: ${campaignLists.length}`)
 
-        localStorage.setItem("accounts", JSON.stringify(campaignLists))      
+       window.localStorage.setItem("accounts", JSON.stringify(campaignLists))      
     }
   }
   return <Context.Provider value={value}>{children}</Context.Provider>

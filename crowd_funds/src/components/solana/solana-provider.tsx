@@ -13,7 +13,7 @@ export const WalletButton = dynamic(async () => (await import('@solana/wallet-ad
   ssr: false,
 })
 
-const wallets = [new PhantomWalletAdapter() ]
+const wallets = [new PhantomWalletAdapter()]
 
 export function SolanaProvider({ children }: { children: ReactNode }) {
   const { cluster } = useCluster()
