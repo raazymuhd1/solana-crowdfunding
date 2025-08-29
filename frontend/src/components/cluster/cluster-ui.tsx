@@ -57,7 +57,7 @@ export function ClusterUiSelect() {
   const { clusters, setCluster, cluster } = useCluster()
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger className='bg-[#8617e8] dark:bg-[#1d0131]' asChild>
         <Button variant="outline">{cluster.name}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

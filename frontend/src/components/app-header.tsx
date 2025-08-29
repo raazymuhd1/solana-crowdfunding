@@ -17,7 +17,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
   }
 
   return (
-    <header className="relative w-[80%] mx-auto text-[#fff] dark:text-[#000] top-[20px] rounded-[20px] moving_shadows z-50 px-4 py-2 bg-[#1d0131] dark:bg-[#8617e8] dark:text-neutral-400">
+    <header className="sticky z-[2] w-[80%] mx-auto text-[#fff] dark:text-[#000] top-[20px] rounded-[20px] moving_shadows z-50 px-4 py-2 bg-[#1d0131] dark:bg-[#8617e8] dark:text-neutral-400">
       <div className="mx-auto flex justify-between items-center">
         <div className="flex gap-[40px] items-baseline gap-4">
           <Link className="text-xl font-extrabold hover:text-neutral-500 dark:hover:text-white" href="/">
@@ -28,7 +28,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
               {links.map(({ label, path }) => (
                 <li key={path} className="">
                   <Link
-                    className={`hover:text-neutral-500 font-semibold  ${isActive(path) ? 'text-neutral-500 dark:text-white' : ''}`}
+                    className={`hover:text-neutral-500 bg-[#8617e8] p-[5px] rounded-[10px] dark:bg-[#1d0131] font-semibold  ${isActive(path) ? 'text-neutral-500 dark:text-white' : ''}`}
                     href={path}
                   >
                     {label}
@@ -44,7 +44,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
         </Button>
 
         <div className="hidden md:flex items-center gap-4">
-          <WalletButton />
+          <WalletButton className='bg-[#8617e8] dark:bg-[#1d0131]' />
           <ClusterUiSelect />
           <ThemeSelect />
         </div>

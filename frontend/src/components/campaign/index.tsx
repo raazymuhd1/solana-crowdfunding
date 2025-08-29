@@ -136,76 +136,79 @@ const CreateCampaign = () => {
 
 
   return (
-    <div className='lg:w-[50%] w-[80%] shadows mt-[80px] mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
-        <div className='flex items-center flex-col gap-[10px]'>
-            <h2 className='font-extrabold text-[clamp(1.5rem,1.3vw,2rem)]'> Create Campaign </h2>
-            <p className='font-normal text-[clamp(12px,1vw,16px)]'> fill up all the necessary details for your campaign </p>
-            <p className='bg-[yellow] text-center font-semibold text-[#000] rounded-[4px] p-[2px]'> <strong> NOTE:  </strong>Please save all the addresses from the popup on the bottom right after created a new campaign </p>
-        </div>
-        
-        <article className='p-[15px] flex flex-col gap-[20px] w-full'>
-              <div className='flex flex-col gap-[10px]'>
-                    {/* inputs */}  
-                    <div className='flex w-full items-center gap-[15px]'>
-                      <Inputs
-                        labelId="title"
-                        inputPlaceholder='enter campaign title'
-                        text='Title:'
-                        containerStyles='w-[50%]'
-                        setCampaignDetails={setCampaignDetails}
-                        campaignDetails={campaignDetails}
-                        updateField='title'
-                        handleChange={() => {}}
-                      />
-                      <Inputs
-                        labelId="authority"
-                        inputPlaceholder='enter campaign description'
-                        text='Campaign Authority:'
-                        containerStyles='w-[50%]'
-                        setCampaignDetails={setCampaignDetails}
-                        campaignDetails={campaignDetails}
-                        updateField='authority'
-                        handleChange={() => {}}
-                      />
-                    </div>
+    <div className='w-full h-full p-[60px] mt-[40px]'>
 
-                     {/* description */}
-                    <div className="w-full flex flex-col gap-[5px]">
-                      <label className='font-semibold' htmlFor="desc"> Description: </label>
-                      <textarea 
-                        onChange={(e) => setCampaignDetails({
-                            ...campaignDetails, description: e.target.value 
-                        })}
-                        rows={6} 
-                        className='w-full p-[10px] border-[1px] rounded-[10px]' 
-                        id="desc" 
-                        placeholder="enter your campaign description" 
-                        />
-                    </div>
-                        
-                    {/* target funds */}
-                    <div className="w-full flex flex-col gap-[5px]">
-                      <label className='font-semibold' htmlFor="fund"> Fund To Raise: </label>
-                      <input
-                        onChange={(e) => setCampaignDetails({
-                          ...campaignDetails, raiseTarget: Number(e.target.value)
-                        })}
-                        className='w-full px-[10px] py-[10px] border-[1px] rounded-[10px]' type="number" id="fund" />
-                    </div>
-              </div>
-
-          {/* a campaign banner & submit btn */}
-          <div className='w-full border-[1px] p-[10px] rounded-[10px] min-h-[150px]'>
-              <h4> for banner later </h4>
+      <div className='lg:w-[50%] w-[80%] shadows mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
+          <div className='flex items-center flex-col gap-[10px]'>
+              <h2 className='font-extrabold text-[clamp(1.5rem,1.3vw,2rem)]'> Create Campaign </h2>
+              <p className='font-normal text-[clamp(12px,1vw,16px)]'> fill up all the necessary details for your campaign </p>
+              <p className='bg-[yellow] text-center font-semibold text-[#000] rounded-[4px] p-[2px]'> <strong> NOTE:  </strong>Please save all the addresses from the popup on the bottom right after created a new campaign </p>
           </div>
+          
+          <article className='p-[15px] flex flex-col gap-[20px] w-full'>
+                <div className='flex flex-col gap-[10px]'>
+                      {/* inputs */}  
+                      <div className='flex w-full items-center gap-[15px]'>
+                        <Inputs
+                          labelId="title"
+                          inputPlaceholder='enter campaign title'
+                          text='Title:'
+                          containerStyles='w-[50%]'
+                          setCampaignDetails={setCampaignDetails}
+                          campaignDetails={campaignDetails}
+                          updateField='title'
+                          handleChange={() => {}}
+                        />
+                        <Inputs
+                          labelId="authority"
+                          inputPlaceholder='enter campaign description'
+                          text='Campaign Authority:'
+                          containerStyles='w-[50%]'
+                          setCampaignDetails={setCampaignDetails}
+                          campaignDetails={campaignDetails}
+                          updateField='authority'
+                          handleChange={() => {}}
+                        />
+                      </div>
 
-          <button 
-          className="px-[10px] py-[5px] shadows border-[1px] bg-[#1d0131] dark:bg-[#8617e8] text-[#fff] dark:text-[#000] font-bold rounded-[10px] w-[30%]"
-            onClick={() => createCampaign()}
-            > 
-            Create Campaign 
-           </button>
-        </article>
+                      {/* description */}
+                      <div className="w-full flex flex-col gap-[5px]">
+                        <label className='font-semibold' htmlFor="desc"> Description: </label>
+                        <textarea 
+                          onChange={(e) => setCampaignDetails({
+                              ...campaignDetails, description: e.target.value 
+                          })}
+                          rows={6} 
+                          className='w-full p-[10px] border-[1px] rounded-[10px]' 
+                          id="desc" 
+                          placeholder="enter your campaign description" 
+                          />
+                      </div>
+                          
+                      {/* target funds */}
+                      <div className="w-full flex flex-col gap-[5px]">
+                        <label className='font-semibold' htmlFor="fund"> Fund To Raise: </label>
+                        <input
+                          onChange={(e) => setCampaignDetails({
+                            ...campaignDetails, raiseTarget: Number(e.target.value)
+                          })}
+                          className='w-full px-[10px] py-[10px] border-[1px] rounded-[10px]' type="number" id="fund" />
+                      </div>
+                </div>
+
+                {/* a campaign banner & submit btn */}
+                <div className='w-full border-[1px] p-[10px] rounded-[10px] min-h-[150px]'>
+                    <h4> for banner later </h4>
+                </div>
+
+                <button 
+                className="px-[10px] py-[5px] shadows border-[1px] bg-[#1d0131] dark:bg-[#8617e8] text-[#fff] dark:text-[#000] font-bold rounded-[10px] w-[30%]"
+                  onClick={() => createCampaign()}
+                  > 
+                  Create Campaign 
+                </button>
+          </article>
+      </div>
 
     </div>
   )
