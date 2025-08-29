@@ -136,7 +136,7 @@ const CreateCampaign = () => {
 
 
   return (
-    <div className='lg:w-[50%] w-[80%] mt-[40px] mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
+    <div className='lg:w-[50%] w-[80%] shadows mt-[80px] mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
         <div className='flex items-center flex-col gap-[10px]'>
             <h2 className='font-extrabold text-[clamp(1.5rem,1.3vw,2rem)]'> Create Campaign </h2>
             <p className='font-normal text-[clamp(12px,1vw,16px)]'> fill up all the necessary details for your campaign </p>
@@ -200,7 +200,7 @@ const CreateCampaign = () => {
           </div>
 
           <button 
-            className="px-[10px] py-[5px] border-[1px] bg-[#fff] text-[#000] font-bold rounded-[10px] w-[30%]"
+          className="px-[10px] py-[5px] shadows border-[1px] bg-[#1d0131] dark:bg-[#8617e8] text-[#fff] dark:text-[#000] font-bold rounded-[10px] w-[30%]"
             onClick={() => createCampaign()}
             > 
             Create Campaign 

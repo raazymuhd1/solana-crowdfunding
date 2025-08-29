@@ -17,7 +17,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
   }
 
   return (
-    <header className="relative w-[80%] mx-auto top-[20px] rounded-[20px] z-50 px-4 py-2 bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-400">
+    <header className="relative w-[80%] mx-auto text-[#fff] dark:text-[#000] top-[20px] rounded-[20px] moving_shadows z-50 px-4 py-2 bg-[#1d0131] dark:bg-[#8617e8] dark:text-neutral-400">
       <div className="mx-auto flex justify-between items-center">
         <div className="flex gap-[40px] items-baseline gap-4">
           <Link className="text-xl font-extrabold hover:text-neutral-500 dark:hover:text-white" href="/">

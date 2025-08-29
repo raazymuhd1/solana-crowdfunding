@@ -1,17 +1,24 @@
 "use client"
-import {useState} from 'react'
+import {Dispatch, SetStateAction, useState} from 'react'
 import { useCluster } from '../cluster/cluster-data-access'
 import { useWallet } from '@solana/wallet-adapter-react'
 import useProgram from '@/hooks'
 import { CROWDFUNDS_IDL } from '@/constants'
 import { Idl } from '@coral-xyz/anchor'
 import { PublicKey } from '@solana/web3.js'
-import { publicKey } from '@coral-xyz/anchor/dist/cjs/utils'
+
+interface IVault {
+  vaultAuthority: PublicKey;
+  vaultKey: PublicKey;
+  campaignKey: PublicKey;
+}
 
 const WithdrawFunds = () => {
         const wallet = useWallet()
+        const [vaultBalance, setVaultBalance] = useState("0")
+        const { connection } = useCluster()
         const [ getProgram ] = useProgram()
-        const [vault, setVault] = useState({
+        const [vault, setVault] = useState<IVault>({
           vaultAuthority: PublicKey.default,
           vaultKey: PublicKey.default,
           campaignKey: PublicKey.default
@@ -63,18 +70,12 @@ const WithdrawFunds = () => {
 
           <div className='lg:w-[50%] w-[90%] p-[20px] mt-[40px] mx-auto border-[1px] rounded-[10px] flex flex-col gap-[20px] items-center'>
             <aside className='flex items-center gap-[10px] w-full'>
-                  <div className="flex w-[50%] flex-col gap-[10px]">
-                      <h3 className='font-semibold'> Vault Authority: </h3>
-                      <input 
-                        className="px-[10px] w-full placeholder:text-center text-center py-[5px] rounded-[10px] border-[1px]"
-                        type="text" 
-                        placeholder='enter the correct vault authority address'
-                        onChange={e => setVault({
-                          ...vault,
-                          vaultAuthority: new PublicKey(e.target.value)
-                        })}
-                        />
-                  </div>
+                 <WithdrawalInputs 
+                     title="Vault Authority:"
+                     placeholder=""
+                     vault={vault}
+                     setVault={setVault}
+                 />
 
                   <div className="flex w-[50%] flex-col gap-[10px]">
                       <h3 className='font-semibold'> Vault Address: </h3>
@@ -82,6 +83,15 @@ const WithdrawFunds = () => {
                         className="px-[10px] w-full placeholder:text-center text-center py-[5px] rounded-[10px] border-[1px]"
                         type="text" 
                         placeholder='enter the correct vault address'
+                        onInput={async(e) => {
+                          try {
+                            const vaultBal = await connection.getBalance(new PublicKey(e.currentTarget.value))
+                            console.log(`vault Balance ${vaultBal}`)
+                            setVaultBalance(vaultBal.toString())
+                          } catch(err) {
+                             console.log(`invalid account address`)
+                          }
+                        }}
                         onChange={e => setVault({
                           ...vault,
                           vaultKey: new PublicKey(e.target.value)
@@ -102,16 +112,46 @@ const WithdrawFunds = () => {
                     })}
                     />
               </div>
-              
-              <button 
-                onClick={withdrawingFunds}
-                className='px-[10px] w-[30%] py-[5px] rounded-[10px] border-[1px]'> Withdraw 
-              </button>
 
-              <strong className='text-[clamp(10px,1vw,12px)] text-[#000] p-[4px] rounded-[10px] bg-[yellow]'> NOTE: after withdrawal, all related accounts will be closed </strong>
+              <aside className='flex items-center w-full justify-between'> 
+                <button 
+                  onClick={withdrawingFunds}
+            className='px-[10px] w-[50%] py-[5px] rounded-[10px] font-semibold bg-[#e54c2a] border-[1px]'> Withdraw 
+                </button>
+
+                <h4 className="text-[clamp(12px,1vw,14px)]"> Current vault balance: <strong> {vaultBalance || 0} </strong> </h4>
+              </aside>
+
+              <strong className='text-[clamp(10px,1vw,12px)] text-[#000] p-[2px] rounded-[10px] bg-[yellow]'> NOTE: after the withdrawal, all related accounts will be closed </strong>
           </div>
     </section>
   )
 }
 
 export default WithdrawFunds
+
+interface InputProps {
+  title: string;
+  placeholder: string;
+  vault: IVault;
+  setVault: Dispatch<SetStateAction<IVault>>;
+}
+
+const WithdrawalInputs = ({
+  vault, setVault, title
+}: InputProps) => {
+    return (
+      <div className="flex w-[50%] flex-col gap-[10px]">
+        <h3 className='font-semibold'> { title } </h3>
+        <input
+          className="px-[10px] w-full placeholder:text-center text-center py-[5px] rounded-[10px] border-[1px]"
+          type="text"
+          placeholder='enter the correct vault authority address'
+          onChange={e => setVault({
+            ...vault,
+            vaultAuthority: new PublicKey(e.target.value)
+          })}
+        />
+      </div>
+    )
+}

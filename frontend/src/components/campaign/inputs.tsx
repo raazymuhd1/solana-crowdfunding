@@ -27,7 +27,7 @@ export const Inputs = ({ text, containerStyles, inputStyles, inputPlaceholder, l
                 id={labelId} 
                 type="text" 
                 placeholder={inputPlaceholder} 
-                className={`${inputStyles} w-full p-[10px] rounded-[10px] border-[1px]`}
+                className={`${inputStyles} w-full focus:outline-[2px_#8617e8] p-[10px] rounded-[10px] border-[2px]`}
                 onChange={(e) => {
                   console.log(`field ${updateField}`)
 
