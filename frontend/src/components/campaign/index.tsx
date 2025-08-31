@@ -1,5 +1,5 @@
 "use client"
-import { useCallback, useState} from 'react'
+import { useState} from 'react'
 import * as anchor from "@coral-xyz/anchor"
 import { CROWDFUNDS_ID, CROWDFUNDS_IDL } from '@/constants'
 import { Inputs } from './inputs'
@@ -100,6 +100,7 @@ const CreateCampaign = () => {
             }
           })
 
+
         toast("Vault Address:", {
             description: `${vaultPda.toString()}`,
             action: {
@@ -136,9 +137,9 @@ const CreateCampaign = () => {
 
 
   return (
-    <div className='w-full h-full p-[60px] mt-[40px]'>
+    <div className='w-full h-full lg:p-[30px] p-[20px] mt-[40px]'>
 
-      <div className='lg:w-[50%] w-[80%] shadows mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
+      <div className='lg:w-[50%] w-full shadows mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
           <div className='flex items-center flex-col gap-[10px]'>
               <h2 className='font-extrabold text-[clamp(1.5rem,1.3vw,2rem)]'> Create Campaign </h2>
               <p className='font-normal text-[clamp(12px,1vw,16px)]'> fill up all the necessary details for your campaign </p>
@@ -148,12 +149,12 @@ const CreateCampaign = () => {
           <article className='p-[15px] flex flex-col gap-[20px] w-full'>
                 <div className='flex flex-col gap-[10px]'>
                       {/* inputs */}  
-                      <div className='flex w-full items-center gap-[15px]'>
+                      <div className='flex w-full lg:flex-row flex-col items-center gap-[15px]'>
                         <Inputs
                           labelId="title"
                           inputPlaceholder='enter campaign title'
                           text='Title:'
-                          containerStyles='w-[50%]'
+                          containerStyles='lg:w-[50%] w-full'
                           setCampaignDetails={setCampaignDetails}
                           campaignDetails={campaignDetails}
                           updateField='title'
@@ -163,7 +164,7 @@ const CreateCampaign = () => {
                           labelId="authority"
                           inputPlaceholder='enter campaign description'
                           text='Campaign Authority:'
-                          containerStyles='w-[50%]'
+                          containerStyles='lg:w-[50%] w-full'
                           setCampaignDetails={setCampaignDetails}
                           campaignDetails={campaignDetails}
                           updateField='authority'
