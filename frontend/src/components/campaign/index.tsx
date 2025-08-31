@@ -139,11 +139,11 @@ const CreateCampaign = () => {
   return (
     <div className='w-full h-full lg:p-[30px] p-[20px] mt-[40px]'>
 
-      <div className='lg:w-[50%] w-full shadows mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
+      <div className='lg:w-[50%] w-full h-full shadows mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
           <div className='flex items-center flex-col gap-[10px]'>
               <h2 className='font-extrabold text-[clamp(1.5rem,1.3vw,2rem)]'> Create Campaign </h2>
               <p className='font-normal text-[clamp(12px,1vw,16px)]'> fill up all the necessary details for your campaign </p>
-              <p className='bg-[yellow] text-center font-semibold text-[#000] rounded-[4px] p-[2px]'> <strong> NOTE:  </strong>Please save all the addresses from the popup on the bottom right after created a new campaign </p>
+              <p className='bg-[yellow] text-center font-semibold text-[#000] rounded-[4px] p-[2px] text-[clamp(12px,1vw,14px)]'> <strong> NOTE:  </strong>Please save all the addresses from the popup on the bottom right after created a new campaign </p>
           </div>
           
           <article className='p-[15px] flex flex-col gap-[20px] w-full'>

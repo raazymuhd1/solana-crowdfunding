@@ -14,7 +14,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
   const headRef = useRef<HTMLDivElement>(null);
 
   function switchingShadows() {
-    
+    console.log(`body bg color ${document.body.style.backgroundColor.match(/#1d0131/)}`)
   }
 
   function isActive(path: string) {
@@ -23,6 +23,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
 
   return (
     <header 
+        onClick={switchingShadows}
         ref={headRef}
         className="sticky z-[2] w-[80%] mx-auto text-[#fff] dark:text-[#000] top-[20px] rounded-[20px] moving_shadows z-50 px-4 py-2 bg-[#1d0131] dark:bg-[#8617e8] dark:text-neutral-400">
       <div className="mx-auto flex justify-between items-center">
