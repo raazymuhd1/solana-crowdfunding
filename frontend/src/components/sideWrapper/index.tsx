@@ -1,9 +1,11 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
+import useProgram from '@/hooks'
 
 // HOC components 
 
 const sideWrapper = (WrappedComp) => {
-  return Wrapper() {
+  return function Wrapper() {
+  
 
      return <WrappedComp />
   }

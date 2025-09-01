@@ -1,5 +1,5 @@
 "use client"
-import { useState} from 'react'
+import { useState, useEffect} from 'react'
 import * as anchor from "@coral-xyz/anchor"
 import { CROWDFUNDS_ID, CROWDFUNDS_IDL } from '@/constants'
 import { Inputs } from './inputs'
@@ -14,6 +14,11 @@ import { toast } from 'sonner'
 // created vaultPda: 7xr9Fdfi7JXG93UXgGX3p3mSbLxfLbXfJPPJuzBqxFFS
 // campaign pda created: EB7zktpQ2VD1UTcMackz8iu36E55QhQfJEJStLSPrAEH
 
+interface AccountsDetail {
+   title: string;
+   description: string;
+}
+
 const CreateCampaign = () => {
   const wallet = useWallet()
   const { setCampaigns } = useCluster()
@@ -25,74 +30,98 @@ const CreateCampaign = () => {
       raiseTarget: 0,
       authority: ""
   })
+  const [accountsDetail, setAccountsDetail] = useState<AccountsDetail[]>([])
+  const [accounts, setAccounts] = useState<PublicKey[]>([])
 
-  console.log(`wallet addr ${wallet.publicKey}`)
-
-  const createCampaign = async() => {
+  useEffect(() => {
     const VAULT_SEED = "VAULT_SEED"
     const CAMPAIGN_SEED = "CAMPAIGN_SEED"
 
-    const raiseTarget = new anchor.BN(campaignDetails.raiseTarget);
-
-    if(!wallet.publicKey) {
-        console.log("no wallet connected")
-        return;
+    if (!wallet.publicKey) {
+      console.log("no wallet connected")
+      return;
     }
 
-    const CAMPAIGN_AUTHOR = wallet.publicKey.toBuffer();
     // seeds for pdas
     const vaultSeeds = [
-        anchor.utils.bytes.utf8.encode(VAULT_SEED),
-        CAMPAIGN_AUTHOR
+      anchor.utils.bytes.utf8.encode(VAULT_SEED),
+      wallet.publicKey?.toBuffer()
     ]
 
     const campaignSeeds = [
-        anchor.utils.bytes.utf8.encode(CAMPAIGN_SEED),
-        CAMPAIGN_AUTHOR,
-        Buffer.from(campaignDetails.title || "campaign title", "utf8")
+      anchor.utils.bytes.utf8.encode(CAMPAIGN_SEED),
+      wallet.publicKey?.toBuffer(),
+      Buffer.from(campaignDetails.title || "campaign title", "utf8")
     ]
 
-    // //@ts-ignore
-    // const vaultPda = generatePda(vaultSeeds);
-    // //@ts-ignore
-    // const campPda = generatePda(campaignSeeds);
-
-    const [vaultPda, vaultBump] = PublicKey.findProgramAddressSync(
+    const [vaultPda] = PublicKey.findProgramAddressSync(
       vaultSeeds,
       CROWDFUNDS_ID
     )
 
-    const [campaignPda, campBump] = PublicKey.findProgramAddressSync(
+    const [campaignPda] = PublicKey.findProgramAddressSync(
       campaignSeeds,
       CROWDFUNDS_ID
     )
 
+    const importantAccounts = [
+      {
+        title: "Vault Address",
+        description: vaultPda.toString()
+      },
+      {
+        title: "Vault Authority Address",
+        description: campaignDetails.authority.toString(),
+      },
+      {
+        title: "Campaign Address",
+        description: campaignPda.toString()
+      },
+    ]
 
+    setAccountsDetail(importantAccounts)
+    setAccounts([
+      vaultPda, campaignPda
+    ])
+  }, [wallet, campaignDetails.title])
+
+  const createCampaign = async() => {
+
+    const raiseTarget = new anchor.BN(campaignDetails.raiseTarget);
+
+    if (!wallet.publicKey) {
+      console.log("no wallet connected")
+      return;
+    }
+  
       try {
-            const campaignTx = await getProgram(
-              wallet,
-              CROWDFUNDS_IDL as anchor.Idl
-            ).methods.initializeCampaign(
-              campaignDetails.title,
-              campaignDetails.description,
-              raiseTarget
-            ).accounts({
-              campaignAuthor: wallet.publicKey,
-              campaign: campaignPda,
-              vault: vaultPda,
-              systemProgram: SystemProgram.programId
-            }).rpc({commitment: "confirmed"})
+          const crowdfunds = getProgram(
+            wallet,
+            CROWDFUNDS_IDL as anchor.Idl
+          )
+          
+          const campaignTx = await crowdfunds.methods.initializeCampaign(
+            campaignDetails.title,
+            campaignDetails.description,
+            raiseTarget
+          ).accounts({
+            campaignAuthor: wallet.publicKey,
+            campaign: accounts[0],
+            vault: accounts[1],
+            systemProgram: SystemProgram.programId
+          }).rpc({commitment: "confirmed"})
     
-          console.log("new campaign tx", campaignTx)
-          console.log(`vault pda ${vaultPda}`)
-          console.log(`campaign pda ${campaignPda}`)
+          // console.log("new campaign tx", campaignTx)
+          console.log(`vault pda ${accounts[0]}`)
+          console.log(`campaign pda ${accounts[1]}`)
+          console.log(`accounts detail ${accountsDetail}`)
           console.log("saving")
 
           // resetting the whole states
           
         setCampaigns({
-            campaignPda: campaignPda,
-            vaultPda: vaultPda,
+            campaignPda: accounts[1],
+            vaultPda: accounts[0],
             campaignDetails: {
                 ...campaignDetails,
                 id: campaignDetails.id + 1,
@@ -101,28 +130,16 @@ const CreateCampaign = () => {
           })
 
 
-        toast("Vault Address:", {
-            description: `${vaultPda.toString()}`,
-            action: {
-               label: "close",
-               onClick: () => console.log("closing")
-            }
-        })
-        toast("Vault Authority Address:", {
-            description: `${campaignDetails.authority.toString()}`,
-            action: {
-               label: "close",
-               onClick: () => console.log("closing")
-            }
-        })
-        toast("Campaign Address:", {
-            description: `${campaignPda.toString()}`,
-            action: {
-               label: "close",
-               onClick: () => console.log("closing")
-            }
-        })
-      
+          for (const acc of accountsDetail) {
+            toast(`${acc.title}:`, {
+                description: `${acc.description}`,
+                action: {
+                   label: "close",
+                   onClick: () => console.log("closing")
+                }
+            })
+          }
+        
           setCampaignDetails({
             id: 0,
             title: "",
@@ -139,7 +156,7 @@ const CreateCampaign = () => {
   return (
     <div className='w-full h-full lg:p-[30px] p-[20px] mt-[40px]'>
 
-      <div className='lg:w-[50%] w-full h-full shadows mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
+      <div className='lg:w-[80%] xl:w-[50%] w-full h-full shadows mx-auto p-[15px] rounded-[15px] border-[1px] flex flex-col gap-[20px]'>
           <div className='flex items-center flex-col gap-[10px]'>
               <h2 className='font-extrabold text-[clamp(1.5rem,1.3vw,2rem)]'> Create Campaign </h2>
               <p className='font-normal text-[clamp(12px,1vw,16px)]'> fill up all the necessary details for your campaign </p>

@@ -1,9 +1,10 @@
 "use client"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CampaignCard from './campaignCard'
 import { dummyCampaigns } from "@/constants"
 import { useCluster } from '../cluster/cluster-data-access'
 import useProgram from '@/hooks'
+import { CROWDFUNDS_ID } from '@/constants'
 import type { CampaignType } from '@/types'
 import dummyImg from "@/assets/images/abs-bg.jpg"
 import { PublicKey } from '@solana/web3.js'
@@ -11,6 +12,19 @@ import { PublicKey } from '@solana/web3.js'
 const CampaignLists = () => {
  const { getCampaigns } = useCluster()
   const [campaignAccns, setCampaignAccns] = useState<CampaignType[]>([])
+  const { connection } = useCluster()
+
+
+  // useEffect(() => {
+  //     async function getAccounts() {
+  //       const allAccounts = await connection.getParsedProgramAccounts(CROWDFUNDS_ID)
+  //       allAccounts.map(acc => {
+  //         console.log(acc.account.data)
+  //       })
+  //     }
+
+  //   getAccounts()
+  // })
 
   console.log(getCampaigns())
 

@@ -4,9 +4,6 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { createContext, ReactNode, useContext } from 'react'
-import { AnchorProvider, Program } from '@coral-xyz/anchor'
-import { CROWDFUNDS_IDL } from '@/constants'
-import { PublicKey } from "@solana/web3.js"
 import type { CampaignLists } from "@/types"
 
 export interface SolanaCluster {

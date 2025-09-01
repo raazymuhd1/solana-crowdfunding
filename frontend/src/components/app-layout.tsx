@@ -7,7 +7,7 @@ import { ClusterChecker } from '@/components/cluster/cluster-ui'
 import { AccountChecker } from '@/components/account/account-ui'
 import sideWrapper from "./sideWrapper"
 
-function AppLayout({
+export function AppLayout({
   children,
   links,
 }: {
@@ -31,4 +31,4 @@ function AppLayout({
   )
 }
 
-export default sideWrapper(AppLayout)
+ sideWrapper(AppLayout)
