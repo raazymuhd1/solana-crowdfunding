@@ -1,10 +1,11 @@
 'use client'
-import { AccountInfo, clusterApiUrl, Connection, Keypair } from '@solana/web3.js'
+import { clusterApiUrl, Connection, Keypair } from '@solana/web3.js'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { createContext, ReactNode, useContext } from 'react'
 import type { CampaignLists } from "@/types"
+
 
 export interface SolanaCluster {
   name: string
@@ -64,7 +65,6 @@ export interface ClusterProviderContext {
   setCluster: (cluster: SolanaCluster) => void
 
   getExplorerUrl(path: string): string,
-  getCampaigns: () => CampaignLists[],
   setCampaigns: (campaign: CampaignLists) => void;
 }
 
@@ -96,22 +96,7 @@ export function ClusterProvider({ children }: { children: ReactNode }) {
     },
     setCluster: (cluster: SolanaCluster) => setCluster(cluster),
     getExplorerUrl: (path: string) => `https://explorer.solana.com/${path}${getClusterUrlParam(cluster)}`,
-    // getting program
-    // getProgram: () => {
-    //   const provider = new AnchorProvider(connection, wallet as any, { commitment: "confirmed" })   
-    //   const crowdfunds = new Program(CROWDFUNDS_IDL, provider)
-    //   return crowdfunds; 
-    // },
 
-    getCampaigns: (): CampaignLists[] => {
-        let campaigns: CampaignLists[] = [];
-        if(typeof window != "undefined") {
-          const storedCampaigns = window.localStorage.getItem("accounts");
-          campaigns = storedCampaigns ? JSON.parse(storedCampaigns) : []
-        }
-
-        return campaigns
-    },
     setCampaigns: function(campaign: CampaignLists) {
         const storedCampaigns = window.localStorage.getItem("accounts");
         const campaignLists: CampaignLists[] = storedCampaigns ? JSON.parse(storedCampaigns) : []

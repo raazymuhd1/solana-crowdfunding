@@ -5,7 +5,7 @@ import { CROWDFUNDS_ID, CROWDFUNDS_IDL } from '@/constants'
 import { Inputs } from './inputs'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useCluster } from '../cluster/cluster-data-access'
-import useProgram from '@/hooks'
+import { useProgram } from '@/hooks'
 import { PublicKey, SystemProgram } from '@solana/web3.js'
 import type { CampaignDetails } from "@/types"
 import { toast } from 'sonner'
@@ -85,6 +85,10 @@ const CreateCampaign = () => {
     ])
   }, [wallet, campaignDetails.title])
 
+
+  /**
+   * @dev creating a new campaign
+   */
   const createCampaign = async() => {
 
     const raiseTarget = new anchor.BN(campaignDetails.raiseTarget);
@@ -95,10 +99,7 @@ const CreateCampaign = () => {
     }
   
       try {
-          const crowdfunds = getProgram(
-            wallet,
-            CROWDFUNDS_IDL as anchor.Idl
-          )
+          const crowdfunds = getProgram()
           
           const campaignTx = await crowdfunds.methods.initializeCampaign(
             campaignDetails.title,

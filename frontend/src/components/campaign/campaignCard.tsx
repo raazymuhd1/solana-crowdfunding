@@ -5,7 +5,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from '@solana/web3.js'
 import { CROWDFUNDS_IDL, CROWDFUNDS_ID } from "@/constants"
 import { Idl } from "@coral-xyz/anchor";
-import useProgram from "@/hooks";
+import { useProgram } from "@/hooks";
 
 interface ICampaignProps {
     title: string;
@@ -39,7 +39,7 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
         const campaignKey = typeof campaignPda == "string" ? new PublicKey(campaignPda) : campaignPda;
 
         try {
-            const crowdfunds = getProgram(wallet,CROWDFUNDS_IDL as Idl)
+            const crowdfunds = getProgram()
             const supprtingCampaignTx = await crowdfunds.methods.donateToCampaign(
                campaignPda,
                new anchor.BN(donateAmount * LAMPORTS_PER_SOL)

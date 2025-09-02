@@ -2,7 +2,7 @@
 import {Dispatch, SetStateAction, useState} from 'react'
 import { useCluster } from '../cluster/cluster-data-access'
 import { useWallet } from '@solana/wallet-adapter-react'
-import useProgram from '@/hooks'
+import {useProgram} from '@/hooks'
 import { CROWDFUNDS_IDL } from '@/constants'
 import { Idl } from '@coral-xyz/anchor'
 import { PublicKey } from '@solana/web3.js'
@@ -39,7 +39,7 @@ const WithdrawFunds = () => {
 
             console.log(`vaultKey: ${vaultKey}`)
 
-            const crowdfunds = getProgram(wallet, CROWDFUNDS_IDL as Idl)
+            const crowdfunds = getProgram()
 
             try {
                 const withdrawTx = await crowdfunds.methods.withdrawFromCampaign(
