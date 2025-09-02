@@ -34,8 +34,42 @@ const CreateCampaign = () => {
   const [accounts, setAccounts] = useState<PublicKey[]>([])
 
   useEffect(() => {
+
+    const importantAccounts = [
+      {
+        title: "Vault Address",
+        description: accounts[0].toString()
+      },
+      {
+        title: "Vault Authority Address",
+        description: campaignDetails.authority.toString(),
+      },
+      {
+        title: "Campaign Address",
+        description: accounts[1].toString()
+      },
+    ]
+
+    for (const acc of importantAccounts) {
+      toast(`${acc.title}:`, {
+        description: `${acc.description}`,
+        action: {
+          label: "close",
+          onClick: () => console.log("closing")
+        }
+      })
+    }
+
+  }, [accountsDetail, campaignDetails.authority])
+
+
+  /**
+   * @dev creating a new campaign
+   */
+  const createCampaign = async() => {
     const VAULT_SEED = "VAULT_SEED"
     const CAMPAIGN_SEED = "CAMPAIGN_SEED"
+    const raiseTarget = new anchor.BN(campaignDetails.raiseTarget);
 
     if (!wallet.publicKey) {
       console.log("no wallet connected")
@@ -64,39 +98,10 @@ const CreateCampaign = () => {
       CROWDFUNDS_ID
     )
 
-    const importantAccounts = [
-      {
-        title: "Vault Address",
-        description: vaultPda.toString()
-      },
-      {
-        title: "Vault Authority Address",
-        description: campaignDetails.authority.toString(),
-      },
-      {
-        title: "Campaign Address",
-        description: campaignPda.toString()
-      },
-    ]
-
-    setAccountsDetail(importantAccounts)
     setAccounts([
       vaultPda, campaignPda
     ])
-  }, [wallet, campaignDetails.title])
 
-
-  /**
-   * @dev creating a new campaign
-   */
-  const createCampaign = async() => {
-
-    const raiseTarget = new anchor.BN(campaignDetails.raiseTarget);
-
-    if (!wallet.publicKey) {
-      console.log("no wallet connected")
-      return;
-    }
   
       try {
           const crowdfunds = getProgram()
@@ -107,14 +112,14 @@ const CreateCampaign = () => {
             raiseTarget
           ).accounts({
             campaignAuthor: wallet.publicKey,
-            campaign: accounts[0],
-            vault: accounts[1],
+            campaign: campaignPda,
+            vault: vaultPda,
             systemProgram: SystemProgram.programId
           }).rpc({commitment: "confirmed"})
     
           // console.log("new campaign tx", campaignTx)
-          console.log(`vault pda ${accounts[0]}`)
-          console.log(`campaign pda ${accounts[1]}`)
+          console.log(`vault pda ${vaultPda}`)
+          console.log(`campaign pda ${campaignPda}`)
           console.log(`accounts detail ${accountsDetail}`)
           console.log("saving")
 
@@ -129,17 +134,6 @@ const CreateCampaign = () => {
                 authority: campaignDetails.authority
             }
           })
-
-
-          for (const acc of accountsDetail) {
-            toast(`${acc.title}:`, {
-                description: `${acc.description}`,
-                action: {
-                   label: "close",
-                   onClick: () => console.log("closing")
-                }
-            })
-          }
         
           setCampaignDetails({
             id: 0,

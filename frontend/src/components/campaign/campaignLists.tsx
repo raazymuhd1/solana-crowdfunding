@@ -12,23 +12,26 @@ import type { CampaignType } from '@/types'
 import dummyImg from "@/assets/images/abs-bg.jpg"
 
 const CampaignLists = () => {
-  const [ getCampaigns ] = useCampaigns()
+  const [campaigns ] = useCampaigns()
   const [campaignAccns, setCampaignAccns] = useState<CampaignType[]>([])
   const { connection } = useCluster()
   const wallet = useWallet()
 
-  console.log(`campaigns ${getCampaigns().then(items => items.length) }`)
+  async function displayCampaigns() {
+    // let campaigns = await getCampaigns()
+    // let campaignsLen = campaigns?.length
 
-  function displayCampaigns() {
+    console.log(`campaigns ${campaigns}`)
+
     if (!wallet.publicKey) {
       return <h2 className='font-bold text-center w-full'> No wallet connected </h2>
     }
 
-    if(getCampaigns.length == 0) {
-      return <h3 className='text-center w-full font-semibold'> No campaign availabe, try to create one on the /campaign page </h3>
-    }
+    // if (campaignsLen > 0) {
+    //   return <h3 className='text-center w-full font-semibold'> No campaign availabe, try to create one on the /campaign page </h3>
+    // }
 
-    // getCampaigns().map((camp, idx) => {
+    //   campaigns.map((camp, idx) => {
     //    if(wallet.publicKey) {
     //       return <CampaignCard
     //         key={idx}
@@ -53,9 +56,9 @@ const CampaignLists = () => {
   return (
       <div 
           className={`w-full h-full p-[20px] mt-[20px] gap-[20px]
-            ${getCampaigns().then(items => items.length > 0 ? "grid lg:grid-cols-[repeat(4,minmax(0,1fr))] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]}" : "flex lg:justify-center items-center lg:flex-nowrap flex-wrap")} `}>
+            "grid lg:grid-cols-[repeat(4,minmax(0,1fr))] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]}" : "flex lg:justify-center items-center lg:flex-nowrap flex-wrap"`}>
 
-        {displayCampaigns() }
+        {Promise.resolve(displayCampaigns())}
     </div>
   )
 }

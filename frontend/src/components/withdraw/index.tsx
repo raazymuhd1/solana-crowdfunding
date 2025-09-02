@@ -3,8 +3,6 @@ import {Dispatch, SetStateAction, useState} from 'react'
 import { useCluster } from '../cluster/cluster-data-access'
 import { useWallet } from '@solana/wallet-adapter-react'
 import {useProgram} from '@/hooks'
-import { CROWDFUNDS_IDL } from '@/constants'
-import { Idl } from '@coral-xyz/anchor'
 import { PublicKey } from '@solana/web3.js'
 
 interface IVault {
