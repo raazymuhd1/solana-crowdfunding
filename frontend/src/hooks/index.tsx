@@ -1,8 +1,9 @@
+"use client"
 import { useEffect, useState } from 'react'
 import { AnchorProvider, Idl, Program } from '@coral-xyz/anchor'
 import { useWallet, WalletContextState,  } from '@solana/wallet-adapter-react'
 import { useCluster } from '@/components/cluster/cluster-data-access'
-import type { CampaignType } from '@/types'
+import type { CampaignLists } from '@/types'
 import { CROWDFUNDS_IDL } from '@/constants'
 
 export const useProgram = () => {
@@ -18,6 +19,7 @@ export const useProgram = () => {
             
         } catch (error) {
             console.log(`error getting program: ${error}`)
+            return undefined as any
         }
     }
 
@@ -29,24 +31,36 @@ export const useProgram = () => {
 
 export const useCampaigns = () => {
         const [getProgram] = useProgram() 
-        const [campaigns, setCampaigns] = useState()
+    const [campaigns, setCampaigns] = useState<CampaignLists[]>([])
+        const [isLoading, setIsLoading] = useState(false)
 
     const getCampaigns = async(): Promise<CampaignType[]> => {
+        setIsLoading(true)
+
         try {
             const crowdfunds = getProgram()
             const campaignAccounts = await crowdfunds.account.campaign.all()
+            const vaultAccounts = await crowdfunds.account.vault.all();
             
-            setCampaigns(campaignAccounts)
+            console.log(`accounts pubkey ${campaignAccounts[0].publicKey}`)
+
+            // const campaigns = 
+
+            setCampaigns([
+                ...campaignAccounts
+            ])
             return campaignAccounts
         } catch(err) {
             console.log(`error getting campaigns: ${err}`)
             return []
+        } finally {
+            setIsLoading(false)
         }
     }
 
     useEffect(() => {
-        getCampaigns()
+             getCampaigns()
     }, [])
 
-    return [campaigns]
+    return [campaigns, isLoading]
 }

@@ -11,13 +11,9 @@ import type { CampaignDetails } from "@/types"
 import { toast } from 'sonner'
 
 // authority: 2pPxaQieCNunVMhzM5fQdFz67pstVNHccYmFSPaXWJaY
-// created vaultPda: 7xr9Fdfi7JXG93UXgGX3p3mSbLxfLbXfJPPJuzBqxFFS
-// campaign pda created: EB7zktpQ2VD1UTcMackz8iu36E55QhQfJEJStLSPrAEH
+// created vaultPda: 52HvtYQfmbQAcPvPcikSR23hp5ubEKVJahL2e2Y7fax
+// campaign pda created: DUADqaVYLT53oe5ARTrXdntkz8h81ZckSeiVtoMBkGKU
 
-interface AccountsDetail {
-   title: string;
-   description: string;
-}
 
 const CreateCampaign = () => {
   const wallet = useWallet()
@@ -30,10 +26,15 @@ const CreateCampaign = () => {
       raiseTarget: 0,
       authority: ""
   })
-  const [accountsDetail, setAccountsDetail] = useState<AccountsDetail[]>([])
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const [accounts, setAccounts] = useState<PublicKey[]>([])
 
   useEffect(() => {
+
+    if(accounts.length == 0 ) {
+       console.log('no accounts being supplied')
+       return;
+    }
 
     const importantAccounts = [
       {
@@ -60,7 +61,9 @@ const CreateCampaign = () => {
       })
     }
 
-  }, [accountsDetail, campaignDetails.authority])
+     setIsSubmitted(false)
+
+  }, [isSubmitted])
 
 
   /**
@@ -120,7 +123,6 @@ const CreateCampaign = () => {
           // console.log("new campaign tx", campaignTx)
           console.log(`vault pda ${vaultPda}`)
           console.log(`campaign pda ${campaignPda}`)
-          console.log(`accounts detail ${accountsDetail}`)
           console.log("saving")
 
           // resetting the whole states
@@ -134,6 +136,8 @@ const CreateCampaign = () => {
                 authority: campaignDetails.authority
             }
           })
+
+          setIsSubmitted(true)
         
           setCampaignDetails({
             id: 0,

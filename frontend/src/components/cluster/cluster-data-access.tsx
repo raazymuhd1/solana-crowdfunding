@@ -102,7 +102,6 @@ export function ClusterProvider({ children }: { children: ReactNode }) {
         const campaignLists: CampaignLists[] = storedCampaigns ? JSON.parse(storedCampaigns) : []
         
         campaignLists.push(campaign)
-        console.log(`campaigns: ${campaignLists.length}`)
 
        window.localStorage.setItem("accounts", JSON.stringify(campaignLists))      
     }

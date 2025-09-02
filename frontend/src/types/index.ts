@@ -1,7 +1,6 @@
 import { PublicKey } from "@solana/web3.js"
 
 export type CampaignDetails = {
-    id: number;
     title: string;
     description: string;
     raiseTarget: number;
@@ -21,7 +20,10 @@ export interface CampaignType {
     campaignAuthor: PublicKey 
 }
 
-
+export interface VaultType {
+    authority: PublicKey;
+    campaign: CampaignType;
+}
 // create a campaign 
 //      ->  save to localstorage 
 //              -> retrieve campaigns from localstorage on campaign list
