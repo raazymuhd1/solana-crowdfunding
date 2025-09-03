@@ -1,6 +1,6 @@
 # CrowdFunding Dapp
 
-**Deployed Frontend URL:** [crowdfunding101](https://crowdfunding101.vercel.app/)
+**Deployed Frontend URL:** [crowds101](https://crowds101.vercel.app/)
 
 **Solana Program ID:** [crowdfundings101](https://solscan.io/account/9k1BXBauRs8a23QoCDcuyTyprFp8wtT2RCqxbnP1MVae?cluster=devnet)
 
