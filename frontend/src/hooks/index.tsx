@@ -40,8 +40,10 @@ export const useCampaigns = () => {
 
         try {
             const crowdfunds = getProgram()
+            // @ts-ignore
             const vaultAccounts = await crowdfunds.account.vault.all();
-
+            
+            // @ts-ignore
             const allCampaigns = vaultAccounts.map(vault => {
             console.log(`type of title ${typeof vault.account.campaign.title}`)
             console.log(`type of desc ${typeof vault.account.campaign.description}`)
