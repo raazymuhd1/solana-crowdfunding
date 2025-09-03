@@ -2,7 +2,7 @@ import { CampaignLists } from "@/components"
 
 export default function Home() {
   return (
-      <div className="w-full h-[80vh]"> 
+      <div className="w-full h-full"> 
 
       <article className="h-full flex flex-col gap-[20px] mx-auto mt-[40px] border-[1px] rounded-[15px]">
             <div className="flex flex-col p-[15px] gap-[15px] items-center">

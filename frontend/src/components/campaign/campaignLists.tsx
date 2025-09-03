@@ -55,7 +55,7 @@ const CampaignLists = () => {
 
   return (
       <div 
-          className={`w-full h-full p-[20px] mt-[20px] gap-[20px]
+          className={`w-full p-[20px] mt-[20px] gap-[40px]
             ${campaigns.length > 0 ? "grid lg:grid-cols-[repeat(4,minmax(0,1fr))] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]" : "flex lg:justify-center items-center lg:flex-nowrap flex-wrap"}`}>
       {/* {displayCampaigns()} */}
 

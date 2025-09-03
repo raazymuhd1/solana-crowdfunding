@@ -61,7 +61,7 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
      }
 
     return (
-        <div className="min-w-[300px] min-h-[300px] rounded-[15px] border-[1px] border-[yellow] flex flex-col gap-[10px] overflow-hidden">
+        <div className="lg:min-w-[300px] min-w-[200px] lg:min-h-[300px] min-h-[200px] rounded-[15px] border-[1px] border-[yellow] flex flex-col gap-[10px] overflow-hidden">
             {/* small banner */}
             <Image src={img} placeholder="blur" className="w-full h-[40%] object-cover cursor-pointer transition-[scale,500ms] hover:scale-[1.1]" alt="campaign-banner" />
 
@@ -69,14 +69,14 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
                 <aside className="flex flex-col gap-[10px] bg-[#000] p-[20px] rounded-[10px] w-full">
                     <div className="flex flex-col gap-[5px]">
                         {/* campaign title */}
-                        <h3 className="font-bold"> {title} </h3>
+                        <h3 className="font-bold text-[clamp(14px,1vw,18px)]"> {title} </h3>
                         {/* campaign desc */}
                         <p> {description} </p>
                     </div>
 
-                    <h4 className="text-[clamp(12px,1vw,14px)]"> Target: {target} <strong className="font-bold">Sol</strong> </h4>
+                    <h4 className="text-[clamp(12px,1vw,14px)]"> <strong className="font-bold">Target:</strong> {target} <strong className="font-bold">Sol</strong> </h4>
 
-                    <h4 className="text-[clamp(12px,1vw,14px)]"> Vault Key: {vaultPda.toString()} </h4>
+                    <h4 className="text-[clamp(10px,1vw,12px)]"> <strong className="font-bold"> Vault Address: </strong> {vaultPda.toString()} </h4>
 
                     <input 
                         onChange={(e) => setDonateAmount(Number(e.target.value))}
