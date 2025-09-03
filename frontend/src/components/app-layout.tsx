@@ -5,7 +5,6 @@ import { AppHeader } from '@/components/app-header'
 import React from 'react'
 import { ClusterChecker } from '@/components/cluster/cluster-ui'
 import { AccountChecker } from '@/components/account/account-ui'
-import sideWrapper from "./sideWrapper"
 
 export function AppLayout({
   children,
@@ -31,4 +30,4 @@ export function AppLayout({
   )
 }
 
- sideWrapper(AppLayout)
+ export default AppLayout
