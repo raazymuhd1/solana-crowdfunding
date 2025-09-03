@@ -70,7 +70,7 @@ const WithdrawFunds = () => {
 
   return (
     <section className="w-full h-[60vh] flex flex-col justify-center mt-[30px]">
-        <div className='w-full flex items-center flex-col gap-[10px]'>
+        <div className='w-full flex text-center items-center flex-col gap-[10px]'>
           <h2 className='font-extrabold text-[clamp(1.5rem,1.3vw,2rem)]'> Funds Withdrawal </h2>
           <p className='font-normal text-[clamp(12px,1vw,16px)]'> Withdraw from the vault of the campaign you've been created. Make sure you have all the required accounts. </p>
         </div>
