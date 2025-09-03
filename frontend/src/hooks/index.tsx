@@ -5,6 +5,7 @@ import { useWallet, WalletContextState,  } from '@solana/wallet-adapter-react'
 import { useCluster } from '@/components/cluster/cluster-data-access'
 import type { CampaignLists } from '@/types'
 import { CROWDFUNDS_IDL } from '@/constants'
+import { PublicKey } from '@solana/web3.js'
 
 export const useProgram = () => {
     const { connection } = useCluster()
@@ -31,25 +32,35 @@ export const useProgram = () => {
 
 export const useCampaigns = () => {
         const [getProgram] = useProgram() 
-    const [campaigns, setCampaigns] = useState<CampaignLists[]>([])
+        const [campaigns, setCampaigns] = useState<CampaignLists[]>([])
         const [isLoading, setIsLoading] = useState(false)
 
-    const getCampaigns = async(): Promise<CampaignType[]> => {
+    const getCampaigns = async(): Promise<CampaignLists[]> => {
         setIsLoading(true)
 
         try {
             const crowdfunds = getProgram()
-            const campaignAccounts = await crowdfunds.account.campaign.all()
             const vaultAccounts = await crowdfunds.account.vault.all();
+
+            const allCampaigns = vaultAccounts.map(vault => {
+            console.log(`type of title ${typeof vault.account.campaign.title}`)
+            console.log(`type of desc ${typeof vault.account.campaign.description}`)
+            console.log(`type of target ${typeof vault.account.campaign.raiseTarget}`)
+            console.log(`type of author ${typeof vault.account.campaign.campaignAuthor}`)
+
+                const { publicKey, account } = vault;
+                console.log(`vault ${account}`)
+
+                return {
+                    vaultPda: publicKey,
+                    campaignPda: account.campaignPda,
+                    campaign: account.campaign
+                }
+            });
             
-            console.log(`accounts pubkey ${campaignAccounts[0].publicKey}`)
-
-            // const campaigns = 
-
-            setCampaigns([
-                ...campaignAccounts
-            ])
-            return campaignAccounts
+            console.log(`allCampaigns ${allCampaigns}`)
+            setCampaigns(allCampaigns)
+            return allCampaigns
         } catch(err) {
             console.log(`error getting campaigns: ${err}`)
             return []
@@ -59,8 +70,13 @@ export const useCampaigns = () => {
     }
 
     useEffect(() => {
-             getCampaigns()
+         const gettingCampaigns = async() => {
+           await getCampaigns()
+         }
+
+         gettingCampaigns()
     }, [])
 
-    return [campaigns, isLoading]
+
+    return [campaigns, isLoading] as const
 }

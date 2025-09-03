@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 // deps import
 import { useWallet } from "@solana/wallet-adapter-react"
 import { PublicKey } from '@solana/web3.js'
@@ -17,50 +17,68 @@ const CampaignLists = () => {
   const { connection } = useCluster()
   const wallet = useWallet()
 
+   console.log(`campaigns ${campaigns.length}`)
 
-   function displayCampaigns() {
+  function displayCampaigns() {
     let campaignsLen = campaigns.length;
-
-    if(!isLoading) {
-      console.log(`campaigns ${campaigns}`)
-    }
-
+    
     if (!wallet.publicKey) {
-      return <h2 className='font-bold text-center w-full'> No wallet connected </h2>
+        console.log("No wallet connected")
+        return <h2> no wallet connected </h2>
     }
 
     if (campaignsLen > 0) {
-      return <h3 className='text-center w-full font-semibold'> No campaign availabe, try to create one on the /campaign page </h3>
+      campaigns.map((camp) => {
+              console.log(`campaign ${camp.campaign.campaignAuthor}`)
+
+              return <CampaignCard
+                  key={camp.vaultPda.toBase58()}
+                    {
+                      ...{
+                        campaignPda: camp.campaignPda,
+                        vaultPda: camp.vaultPda,
+                        title: camp?.campaign.title,
+                        description: camp?.campaign.description,
+                        ["img"]: dummyImg,
+                        authority: camp?.campaign?.campaignAuthor,
+                        target: camp.campaign.raiseTarget.toString()
+                      }
+                    }
+                  />
+          })
+    } else {
+       return <h3 className='text-center w-full font-semibold'> No campaign availabe, try to create one on the /campaign page </h3>
     }
 
-    //   campaigns.map((camp, idx) => {
-    //    if(wallet.publicKey) {
-    //       return <CampaignCard
-    //         key={idx}
-    //           {
-    //             ...{
-    //               campaignPda: new PublicKey(camp.campaignPda),
-    //               vaultPda: new PublicKey(camp.vaultPda),
-    //               title: camp?.campaignDetails.title,
-    //               description: camp?.campaignDetails.description,
-    //               ["img"]: dummyImg,
-    //               authority: camp.campaignDetails.authority.length > 0 ? new PublicKey(camp.campaignDetails.authority) : new PublicKey(wallet.publicKey),
-    //               target: camp.campaignDetails.raiseTarget
-    //             }
-    //           }
-    //         />
-    //       }
-    //       return
-    // })
 
   }
 
   return (
       <div 
           className={`w-full h-full p-[20px] mt-[20px] gap-[20px]
-            "grid lg:grid-cols-[repeat(4,minmax(0,1fr))] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]}" : "flex lg:justify-center items-center lg:flex-nowrap flex-wrap"`}>
+            ${campaigns.length > 0 ? "grid lg:grid-cols-[repeat(4,minmax(0,1fr))] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]" : "flex lg:justify-center items-center lg:flex-nowrap flex-wrap"}`}>
+      {/* {displayCampaigns()} */}
 
-        {displayCampaigns()}
+        {
+          campaigns.length > 0 
+          ? campaigns.map((camp) => (
+              <CampaignCard
+                  key={camp.vaultPda.toBase58()}
+                    {
+                      ...{
+                        campaignPda: camp.campaignPda,
+                        vaultPda: camp.vaultPda,
+                        title: camp?.campaign.title,
+                        description: camp?.campaign.description,
+                        ["img"]: dummyImg,
+                        authority: camp?.campaign?.campaignAuthor,
+                        target: camp.campaign.raiseTarget.toString()
+                      }
+                    }
+              />
+          )) 
+            : <h3 className='text-center w-full font-semibold'> No campaign availabe, try to create one on the /campaign page </h3>
+        }
     </div>
   )
 }

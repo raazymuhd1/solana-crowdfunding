@@ -10,7 +10,7 @@ export type CampaignDetails = {
 export interface CampaignLists {
     campaignPda: PublicKey;
     vaultPda: PublicKey;
-    campaignDetails: CampaignDetails
+    campaign: CampaignType
 }
 
 export interface CampaignType {

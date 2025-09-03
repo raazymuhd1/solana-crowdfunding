@@ -3,14 +3,12 @@ import * as anchor from "@coral-xyz/anchor"
 import Image, { StaticImageData } from "next/image"
 import { useWallet } from '@solana/wallet-adapter-react'
 import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from '@solana/web3.js'
-import { CROWDFUNDS_IDL, CROWDFUNDS_ID } from "@/constants"
-import { Idl } from "@coral-xyz/anchor";
 import { useProgram } from "@/hooks";
 
 interface ICampaignProps {
     title: string;
     description: string;
-    target: number;
+    target: string;
     img: StaticImageData;
     campaignPda: PublicKey;
     vaultPda: PublicKey;
@@ -22,7 +20,7 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
     const [donateAmount, setDonateAmount] = useState(0)
      const [getProgram] = useProgram()
 
-    console.log(`vault key : ${vaultPda}`)
+    console.log(`authority ${authority}`)
 
 
      /**
