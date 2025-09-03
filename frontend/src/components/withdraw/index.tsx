@@ -4,6 +4,7 @@ import { useCluster } from '../cluster/cluster-data-access'
 import { useWallet } from '@solana/wallet-adapter-react'
 import {useProgram} from '@/hooks'
 import { PublicKey } from '@solana/web3.js'
+import { toast } from 'sonner'
 
 interface IVault {
   vaultAuthority: PublicKey;
@@ -21,13 +22,21 @@ const WithdrawFunds = () => {
           vaultKey: PublicKey.default,
           campaignKey: PublicKey.default
         })
-
-        console.log(`vault pubkey: ${ PublicKey.default }`)
+        const inputsStatus = vault.campaignKey.toString().length == 0 || vault.vaultAuthority.toString().length == 0 || vault.vaultKey.toString().length == 0;
         
+        /**
+         * @dev function to withdraw the funds, only the owner that can call this function, unauthorized users are not allowed to call this function
+         */
         const withdrawingFunds = async() => {
 
             if(!wallet.publicKey) {
                console.log("no wallet connected")
+            }
+
+            if(inputsStatus) {
+                toast("missing input field", {
+                  description: "please fill out all the inputs"
+                })
             }
 
 
@@ -113,8 +122,10 @@ const WithdrawFunds = () => {
 
               <aside className='flex items-center w-full justify-between'> 
                 <button 
-                  onClick={withdrawingFunds}
-            className='px-[10px] w-[30%] py-[5px] rounded-[10px] font-semibold bg-[#1d0131] dark:bg-[#8617e8] dark:text-[#000] text-[#fff] border-[1px]'> Withdraw 
+                   disabled={inputsStatus}
+                   onClick={withdrawingFunds}
+                  className={`${inputsStatus ? "cursor-disabled" : "cursor-pointer"}  px-[10px] w-[30%] py-[5px] rounded-[10px] font-semibold bg-[#1d0131] dark:bg-[#8617e8] dark:text-[#000] text-[#fff] border-[1px]`}> 
+                  Withdraw 
                 </button>
 
                 <h4 className="text-[clamp(12px,1vw,14px)]"> Current vault balance: <strong> {vaultBalance || 0} </strong> </h4>

@@ -10,17 +10,12 @@ import { PublicKey, SystemProgram } from '@solana/web3.js'
 import type { CampaignDetails } from "@/types"
 import { toast } from 'sonner'
 
-// authority: 2pPxaQieCNunVMhzM5fQdFz67pstVNHccYmFSPaXWJaY
-// created vaultPda: 52HvtYQfmbQAcPvPcikSR23hp5ubEKVJahL2e2Y7fax
-// campaign pda created: DUADqaVYLT53oe5ARTrXdntkz8h81ZckSeiVtoMBkGKU
-
 
 const CreateCampaign = () => {
   const wallet = useWallet()
   const { setCampaigns } = useCluster()
   const [ getProgram ] = useProgram()
   const [campaignDetails, setCampaignDetails] = useState<CampaignDetails>({
-      id: 0,
       title: "",
       description: "",
       raiseTarget: 0,
@@ -28,6 +23,8 @@ const CreateCampaign = () => {
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [accounts, setAccounts] = useState<PublicKey[]>([])
+  const inputsStatus = campaignDetails.title.length == 0 || campaignDetails.description.length == 0 ||
+    campaignDetails.raiseTarget == 0 || campaignDetails.authority.length == 0
 
   useEffect(() => {
 
@@ -79,6 +76,12 @@ const CreateCampaign = () => {
       return;
     }
 
+    if(inputsStatus) {
+       toast("missing input",{
+         description: "there's missing input, all inputs are required"
+       })
+    }
+
     // seeds for pdas
     const vaultSeeds = [
       anchor.utils.bytes.utf8.encode(VAULT_SEED),
@@ -120,27 +123,16 @@ const CreateCampaign = () => {
             systemProgram: SystemProgram.programId
           }).rpc({commitment: "confirmed"})
     
-          // console.log("new campaign tx", campaignTx)
+          console.log("new campaign tx", campaignTx)
           console.log(`vault pda ${vaultPda}`)
           console.log(`campaign pda ${campaignPda}`)
           console.log("saving")
 
           // resetting the whole states
           
-        setCampaigns({
-            campaignPda: accounts[1],
-            vaultPda: accounts[0],
-            campaignDetails: {
-                ...campaignDetails,
-                id: campaignDetails.id + 1,
-                authority: campaignDetails.authority
-            }
-          })
-
           setIsSubmitted(true)
         
           setCampaignDetails({
-            id: 0,
             title: "",
             description: "",
             raiseTarget: 0,
@@ -219,7 +211,8 @@ const CreateCampaign = () => {
                 </div>
 
                 <button 
-                className="px-[10px] py-[5px] shadows border-[1px] bg-[#1d0131] dark:bg-[#8617e8] text-[#fff] dark:text-[#000] font-bold rounded-[10px] w-[30%]"
+                disabled={inputsStatus}
+                className={`px-[10px] py-[5px] shadows border-[1px] bg-[#1d0131] dark:bg-[#8617e8] text-[#fff] dark:text-[#000] font-bold ${inputsStatus ? "cursor-disabled" : "cursor-pointer"} rounded-[10px] w-[30%]`}
                   onClick={() => createCampaign()}
                   > 
                   Create Campaign 
