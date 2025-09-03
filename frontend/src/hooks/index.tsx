@@ -40,15 +40,15 @@ export const useCampaigns = () => {
 
         try {
             const crowdfunds = getProgram()
-            // @ts-expect-error
+            // @ts-expect-error the vault account does exist on the program
             const vaultAccounts = await crowdfunds.account.vault.all();
             
-            // @ts-expect-error
+            // @ts-expect-error the vault account does exist on the program
             const allCampaigns = vaultAccounts.map(vault => {
-            console.log(`type of title ${typeof vault.account.campaign.title}`)
-            console.log(`type of desc ${typeof vault.account.campaign.description}`)
-            console.log(`type of target ${typeof vault.account.campaign.raiseTarget}`)
-            console.log(`type of author ${typeof vault.account.campaign.campaignAuthor}`)
+                console.log(`type of title ${typeof vault.account.campaign.title}`)
+                console.log(`type of desc ${typeof vault.account.campaign.description}`)
+                console.log(`type of target ${typeof vault.account.campaign.raiseTarget}`)
+                console.log(`type of author ${typeof vault.account.campaign.campaignAuthor}`)
 
                 const { publicKey, account } = vault;
                 console.log(`vault ${account}`)
