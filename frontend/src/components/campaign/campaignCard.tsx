@@ -1,9 +1,11 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import * as anchor from "@coral-xyz/anchor"
 import Image, { StaticImageData } from "next/image"
 import { useWallet } from '@solana/wallet-adapter-react'
 import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from '@solana/web3.js'
 import { useProgram } from "@/hooks";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Copy, Check } from "lucide-react"
 
 interface ICampaignProps {
     title: string;
@@ -19,9 +21,13 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
      const wallet = useWallet()
     const [donateAmount, setDonateAmount] = useState(0)
      const [getProgram] = useProgram()
+     const [copied, setCopied] = useState(false)
 
-    console.log(`authority ${authority}`)
-
+     useEffect(() => {
+         setTimeout(() => {
+            setCopied(false)
+         }, 2000)
+     }, [copied])
 
      /**
       * @dev donating to a campaign
@@ -61,12 +67,12 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
      }
 
     return (
-        <div className="lg:min-w-[300px] min-w-[200px] lg:min-h-[300px] min-h-[200px] rounded-[15px] border-[1px] border-[yellow] flex flex-col gap-[10px] overflow-hidden">
+        <div className="lg:min-w-[300px] min-w-[200px] lg:min-h-[300px] min-h-[200px] rounded-[15px] border-[1px] dark:border-[#8617e8] flex flex-col gap-[10px] overflow-hidden">
             {/* small banner */}
             <Image src={img} placeholder="blur" className="w-full h-[40%] object-cover cursor-pointer transition-[scale,500ms] hover:scale-[1.1]" alt="campaign-banner" />
 
-            <article className="h-[50%] flex flex-col justify-center gap-[15px] w-full h-full bg-[yellow] p-[1px]">
-                <aside className="flex flex-col gap-[10px] bg-[#000] p-[20px] rounded-[10px] w-full">
+            <article className="h-[50%] flex flex-col justify-center gap-[15px] w-full h-full bg-[#1d0131] dark:bg-[#8617e8] p-[1px]">
+                <aside className="flex flex-col gap-[10px] bg-[#fff] dark:bg-[#000]  p-[20px] rounded-[10px] w-full">
                     <div className="flex flex-col gap-[5px]">
                         {/* campaign title */}
                         <h3 className="font-bold text-[clamp(14px,1vw,18px)]"> {title} </h3>
@@ -76,16 +82,24 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
 
                     <h4 className="text-[clamp(12px,1vw,14px)]"> <strong className="font-bold">Target:</strong> {target} <strong className="font-bold">Sol</strong> </h4>
 
-                    <h4 className="text-[clamp(10px,1vw,12px)]"> <strong className="font-bold"> Vault Address: </strong> {vaultPda.toString()} </h4>
+                    <div className="flex flex-col "> 
+                        <strong className="font-bold"> Vault Address: </strong> 
+                        <div className="flex items-center gap-[5px]">
+                            <p className="text-[clamp(10px,1vw,12px)]"> {vaultPda.toString().substring(0, 10)}...{vaultPda.toString().substring(15, vaultPda.toString().length - 5)} </p>
+                            <CopyToClipboard text={vaultPda.toString()}>
+                                {!copied ? <Copy className="w-[15px] cursor-pointer" onClick={() => setCopied(true)} /> : <Check className="w-[15px] cursor-pointer" />}
+                            </CopyToClipboard>
+                        </div>
+                    </div>
 
                     <input 
                         onChange={(e) => setDonateAmount(Number(e.target.value))}
-                        type="number" placeholder="enter an amount to donate" className="w-full p-[10px] border-[1px] text-[#fff]  placeholder-[#fff] rounded-[10px]" />
+                        type="number" placeholder="enter an amount to donate" className="w-full p-[10px] border-[1px] dark:text-[#fff] text-[#000]  dark:placeholder-[#fff] placeholder-[#000] rounded-[10px]" />
 
                     {/* donate button */}
                     <button 
                         onClick={() => supportCampaign()}
-                        className="py-[5px] bg-[#fff] text-[#000] px-[10px] border-[1px] rounded-[15px] font-bold w-full"> Support </button>
+                        className="py-[5px] bg-[#1d0131] dark:bg-[#fff] text-[#fff] dark:text-[#000] px-[10px] border-[1px] rounded-[15px] font-bold w-full"> Support </button>
                 </aside>
             </article>
         </div>
