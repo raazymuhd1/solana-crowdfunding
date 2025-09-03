@@ -17,17 +17,45 @@ interface ICampaignProps {
     authority: PublicKey;
 }
 
+interface ICopy {
+    [index: string]: boolean;
+}
+
 const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authority, target }: ICampaignProps) => {
      const wallet = useWallet()
     const [donateAmount, setDonateAmount] = useState(0)
      const [getProgram] = useProgram()
-     const [copied, setCopied] = useState(false)
+    const [copied, setCopied] = useState<ICopy>({
+        ['vault']: false,
+        ['campaign']: false,
+        ['authority']: false 
+     })
 
-     useEffect(() => {
+     const [addresses, setAddresses] = useState([
+        {
+            text: "Vault",
+            value: vaultPda.toString()
+        },
+        {
+            text: "Campaign",
+            value: campaignPda.toString()
+        },
+        {
+            text: "Authority",
+            value: authority.toString()
+        },
+     ])
+
+    //  useEffect(() => {
+     function handleCopy(field: string) {
+         setCopied({ ...copied, [field]: true })
+
          setTimeout(() => {
-            setCopied(false)
+            setCopied({ ...copied, [field]: false })
          }, 2000)
-     }, [copied])
+
+     }
+    //  }, [copied])
 
      /**
       * @dev donating to a campaign
@@ -67,7 +95,7 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
      }
 
     return (
-        <div className="lg:min-w-[300px] min-w-[200px] lg:min-h-[300px] min-h-[200px] rounded-[15px] border-[1px] dark:border-[#8617e8] flex flex-col gap-[10px] overflow-hidden">
+        <div className="lg:min-w-[330px] min-w-[200px] lg:min-h-[200px] min-h-[200px] rounded-[15px] border-[1px] dark:border-[#8617e8] flex flex-col gap-[10px] overflow-hidden">
             {/* small banner */}
             <Image src={img} placeholder="blur" className="w-full h-[40%] object-cover cursor-pointer transition-[scale,500ms] hover:scale-[1.1]" alt="campaign-banner" />
 
@@ -82,15 +110,17 @@ const CampaignCard = ({ title, description, img, campaignPda, vaultPda, authorit
 
                     <h4 className="text-[clamp(12px,1vw,14px)]"> <strong className="font-bold">Target:</strong> {target} <strong className="font-bold">Sol</strong> </h4>
 
-                    <div className="flex flex-col "> 
-                        <strong className="font-bold"> Vault Address: </strong> 
-                        <div className="flex items-center gap-[5px]">
-                            <p className="text-[clamp(10px,1vw,12px)]"> {vaultPda.toString().substring(0, 10)}...{vaultPda.toString().substring(15, vaultPda.toString().length - 5)} </p>
-                            <CopyToClipboard text={vaultPda.toString()}>
-                                {!copied ? <Copy className="w-[15px] cursor-pointer" onClick={() => setCopied(true)} /> : <Check className="w-[15px] cursor-pointer" />}
-                            </CopyToClipboard>
-                        </div>
-                    </div>
+                        {addresses.map((addr, idx) => (
+                            <div key={idx} className="flex flex-col "> 
+                                <strong className="font-bold"> {addr.text}: </strong> 
+                                <div className="flex items-center gap-[5px]">
+                                    <p className="text-[clamp(10px,1vw,12px)]"> {addr.value.substring(0, 10)}...{addr.value.substring(15, addr.value.length - 5)} </p>
+                                        <CopyToClipboard text={addr.value}>
+                                            {!copied[addr.text.toLowerCase()] ? <Copy className="w-[15px] cursor-pointer" onClick={() => handleCopy(addr.text.toLowerCase())} /> : <Check className="w-[15px] cursor-pointer" />}
+                                        </CopyToClipboard>
+                                </div>
+                            </div>
+                        )) }
 
                     <input 
                         onChange={(e) => setDonateAmount(Number(e.target.value))}

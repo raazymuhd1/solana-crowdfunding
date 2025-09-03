@@ -4,7 +4,7 @@ export default function Home() {
   return (
       <div className="w-full h-full"> 
 
-      <article className="h-full flex flex-col gap-[20px] mx-auto mt-[40px] border-[1px] rounded-[15px]">
+      <article className="h-full lg:w-[90%] w-[100%] flex flex-col gap-[20px] mx-auto mt-[40px] border-[1px] rounded-[15px]">
             <div className="flex flex-col p-[15px] gap-[15px] items-center">
               <h2 
                 className='font-extrabold text-[clamp(1.5rem,1.3vw,2rem)]'> Active Campaigns </h2>

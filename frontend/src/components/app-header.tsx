@@ -25,7 +25,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
     <header 
         onClick={switchingShadows}
         ref={headRef}
-        className="sticky z-[2] w-[80%] mx-auto text-[#fff] dark:text-[#000] top-[20px] rounded-[20px] moving_shadows z-50 px-4 py-2 bg-[#1d0131] dark:bg-[#8617e8] dark:text-neutral-400">
+        className="sticky z-[2] w-[90%] mx-auto text-[#fff] dark:text-[#000] top-[20px] rounded-[20px] moving_shadows z-50 px-4 py-2 bg-[#1d0131] dark:bg-[#8617e8] dark:text-neutral-400">
       <div className="mx-auto flex justify-between items-center">
         <div className="flex gap-[40px] items-baseline gap-4">
           <Link className="text-xl font-extrabold hover:text-neutral-500 dark:hover:text-white" href="/">
@@ -47,11 +47,11 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
           </div>
         </div>
 
-        <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setShowMenu(!showMenu)}>
+        <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setShowMenu(!showMenu)}>
           {showMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </Button>
 
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4">
           <WalletButton className='bg-[#8617e8] dark:bg-[#1d0131]' />
           <ClusterUiSelect />
           <ThemeSelect />

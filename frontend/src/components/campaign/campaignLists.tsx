@@ -19,45 +19,11 @@ const CampaignLists = () => {
 
    console.log(`campaigns ${campaigns.length}`)
 
-  function displayCampaigns() {
-    let campaignsLen = campaigns.length;
-    
-    if (!wallet.publicKey) {
-        console.log("No wallet connected")
-        return <h2> no wallet connected </h2>
-    }
-
-    if (campaignsLen > 0) {
-      campaigns.map((camp) => {
-              console.log(`campaign ${camp.campaign.campaignAuthor}`)
-
-              return <CampaignCard
-                  key={camp.vaultPda.toBase58()}
-                    {
-                      ...{
-                        campaignPda: camp.campaignPda,
-                        vaultPda: camp.vaultPda,
-                        title: camp?.campaign.title,
-                        description: camp?.campaign.description,
-                        ["img"]: dummyImg,
-                        authority: camp?.campaign?.campaignAuthor,
-                        target: camp.campaign.raiseTarget.toString()
-                      }
-                    }
-                  />
-          })
-    } else {
-       return <h3 className='text-center w-full font-semibold'> No campaign availabe, try to create one on the /campaign page </h3>
-    }
-
-
-  }
 
   return (
       <div 
-          className={`w-full p-[20px] mt-[20px] gap-[40px]
-            ${campaigns.length > 0 ? "grid lg:grid-cols-[repeat(4,minmax(0,1fr))] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]" : "flex lg:justify-center items-center lg:flex-nowrap flex-wrap"}`}>
-      {/* {displayCampaigns()} */}
+          className={`w-full p-[10px] mt-[20px] gap-[30px] lg:gap-x-[100px]
+            ${campaigns.length > 0 ? "grid lg:grid-cols-[repeat(4,minmax(0,1fr))] md:grid-cols-[repeat(2,minmax(100px,1fr))] grid-cols-[repeat(1,minmax(100px,1fr))]" : "flex lg:justify-center items-center lg:flex-nowrap flex-wrap"}`}>
 
         {
           campaigns.length > 0 
@@ -77,7 +43,9 @@ const CampaignLists = () => {
                     }
               />
           )) 
-            : <h3 className='text-center w-full font-semibold'> No campaign availabe, try to create one on the /campaign page </h3>
+            : 
+            <h3 className='text-center w-full font-semibold'> No campaign availabe, try to create one on the /campaign page 
+            </h3>
         }
     </div>
   )
