@@ -75,8 +75,8 @@ const WithdrawFunds = () => {
           <p className='font-normal text-[clamp(12px,1vw,16px)]'> Withdraw from the vault of the campaign you've been created. Make sure you have all the required accounts. </p>
         </div>
 
-          <div className='lg:w-[70%] shadows w-[90%] p-[20px] mt-[40px] mx-auto border-[1px] rounded-[10px] flex flex-col gap-[20px] items-center'>
-            <aside className='flex items-center gap-[10px] w-full'>
+          <div className='lg:w-[70%] shadows w-full p-[20px] mt-[40px] mx-auto border-[1px] rounded-[10px] flex flex-col gap-[20px] items-center'>
+            <aside className='flex items-center md:flex-nowrap flex-wrap gap-[10px] w-full'>
                  <WithdrawalInputs 
                      title="Vault Authority:"
                      placeholder=""
@@ -84,7 +84,7 @@ const WithdrawFunds = () => {
                      setVault={setVault}
                  />
 
-                  <div className="flex w-[50%] flex-col gap-[10px]">
+                  <div className="flex md:w-[50%] w-full flex-col gap-[5px]">
                       <h3 className='font-semibold'> Vault Address: </h3>
                       <input 
                         className="px-[10px] w-full text-center py-[5px] rounded-[10px] border-[1px]"
@@ -107,7 +107,7 @@ const WithdrawFunds = () => {
                   </div>
             </aside>
 
-              <div className="flex w-full mx-auto flex-col gap-[10px]">
+              <div className="flex w-full mx-auto flex-col gap-[5px]">
                   <h3 className='font-semibold'> Campaign Address: </h3>
                   <input 
                     className="px-[10px] w-full text-center py-[5px] rounded-[10px]  border-[1px]"
@@ -120,18 +120,21 @@ const WithdrawFunds = () => {
                     />
               </div>
 
-              <aside className='flex items-center w-full justify-between'> 
+              <aside className='flex  items-center w-full justify-between'> 
                 <button 
                    disabled={inputsStatus}
                    onClick={withdrawingFunds}
-                  className={`${inputsStatus ? "cursor-disabled" : "cursor-pointer"}  px-[10px] w-[30%] py-[5px] rounded-[10px] font-semibold bg-[#1d0131] dark:bg-[#8617e8] dark:text-[#000] text-[#fff] border-[1px]`}> 
+                  className={`${inputsStatus ? "cursor-not-allowed" : "cursor-pointer"} text-[clamp(14px,1vw,16px)] px-[10px] w-[fit-content] lg:w-[30%] py-[5px] rounded-[10px] font-semibold bg-[#1d0131] dark:bg-[#8617e8] dark:text-[#000] text-[#fff] border-[1px]`}> 
                   Withdraw 
                 </button>
 
-                <h4 className="text-[clamp(12px,1vw,14px)]"> Current vault balance: <strong> {vaultBalance || 0} </strong> </h4>
+                <aside className='flex items-center gap-[5px]'>
+                   <h4 className="text-[clamp(14px,1vw,16px)]"> vault balance: </h4>
+                  <strong className='text-[clamp(14px,1vw,16px)]'> {vaultBalance || 0} Sol </strong>
+                </aside>
               </aside>
 
-              <strong className='text-[clamp(8px,1vw,10px)] text-[#000] p-[2px] rounded-[10px] bg-[yellow]'> NOTE: after the withdrawal, all related accounts will be closed </strong>
+              <strong className='text-[clamp(8px,1vw,10px)]  text-center text-[#000] p-[2px] rounded-[5px] bg-[yellow]'> NOTE: after the withdrawal, all related accounts will be closed </strong>
           </div>
     </section>
   )
@@ -150,7 +153,7 @@ const WithdrawalInputs = ({
   vault, setVault, title
 }: InputProps) => {
     return (
-      <div className="flex w-[50%] flex-col gap-[10px]">
+      <div className="flex w-full md:w-[50%] flex-col gap-[5px]">
         <h3 className='font-semibold'> { title } </h3>
         <input
           className="px-[10px] w-full placeholder:text-center text-center py-[5px] rounded-[10px] border-[1px]"

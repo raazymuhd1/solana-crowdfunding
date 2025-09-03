@@ -212,7 +212,7 @@ const CreateCampaign = () => {
 
                 <button 
                 disabled={inputsStatus}
-                className={`px-[10px] py-[5px] shadows border-[1px] bg-[#1d0131] dark:bg-[#8617e8] text-[#fff] dark:text-[#000] font-bold ${inputsStatus ? "cursor-disabled" : "cursor-pointer"} rounded-[10px] w-[30%]`}
+            className={`px-[10px] py-[5px] dark:text-[#fff] text-[#000] shadows border-[1px] bg-[#1d0131] dark:bg-[#8617e8] text-[#fff] dark:text-[#000] font-bold ${inputsStatus ? "cursor-not-allowed" : "cursor-pointer"} text-[clamp(14px,1vw,16px)] rounded-[10px] w-[fit-content] lg:w-[30%]`}
                   onClick={() => createCampaign()}
                   > 
                   Create Campaign 
